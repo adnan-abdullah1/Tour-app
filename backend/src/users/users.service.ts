@@ -56,10 +56,10 @@ export class UsersService {
 
     let photo: FileType | null | undefined = undefined;
 
-    if (false && createUserDto?.photo?.id) {
-       const fileObject = {}// await this.filesService.findById(
-      //   createUserDto.photo.id,
-      // );
+    if (createUserDto.photo?.id) {
+      const fileObject = await this.filesService.findById(
+        createUserDto.photo.id,
+      );
       if (!fileObject) {
         throw new UnprocessableEntityException({
           status: HttpStatus.UNPROCESSABLE_ENTITY,
@@ -68,7 +68,7 @@ export class UsersService {
           },
         });
       }
-      let photo = fileObject;
+      photo = fileObject;
     } else if (createUserDto.photo === null) {
       photo = null;
     }
@@ -210,10 +210,10 @@ export class UsersService {
 
     let photo: FileType | null | undefined = undefined;
 
-    if (false && updateUserDto.photo?.id) {
-      const fileObject = {} //await this.filesService.findById(
-      //   updateUserDto.photo.id,
-      // );
+    if (updateUserDto.photo?.id) {
+      const fileObject = await this.filesService.findById(
+        updateUserDto.photo.id,
+      );
       if (!fileObject) {
         throw new UnprocessableEntityException({
           status: HttpStatus.UNPROCESSABLE_ENTITY,
@@ -222,7 +222,7 @@ export class UsersService {
           },
         });
       }
-     let photo = fileObject;
+      photo = fileObject;
     } else if (updateUserDto.photo === null) {
       photo = null;
     }
