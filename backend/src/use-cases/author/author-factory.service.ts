@@ -14,8 +14,8 @@ export class AuthorFactoryService {
 
   updateAuthor(updateAuthorDto: UpdateAuthorDto) {
     const newAuthor = new Author();
-    newAuthor.firstName = updateAuthorDto.firstName;
-    newAuthor.lastName = updateAuthorDto.lastName;
+    newAuthor.firstName = updateAuthorDto.firstName as string;
+    newAuthor.lastName = updateAuthorDto.lastName as string;
 
     return newAuthor;
   }

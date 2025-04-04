@@ -13,7 +13,7 @@ export class GenreFactoryService {
 
   updateGenre(updateGenreDto: UpdateGenreDto) {
     const newGenre = new Genre();
-    newGenre.name = updateGenreDto.name;
+    newGenre.name = updateGenreDto.name as string;
 
     return newGenre;
   }

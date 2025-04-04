@@ -16,10 +16,10 @@ export class BookFactoryService {
 
   updateBook(updateBookDto: UpdateBookDto) {
     const newBook = new Book();
-    newBook.title = updateBookDto.title;
+    newBook.title = updateBookDto.title as string;
     newBook.author = updateBookDto.authorId;
     newBook.genre = updateBookDto.genreId;
-    newBook.publishDate = updateBookDto.publishDate;
+    newBook.publishDate = updateBookDto.publishDate as Date;
 
     return newBook;
   }
