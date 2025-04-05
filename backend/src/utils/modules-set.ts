@@ -25,6 +25,7 @@ import { LoggerModule } from 'nestjs-pino';
 import path from 'path';
 import { DataSource, DataSourceOptions } from 'typeorm';
 import loggerFactory from './logger-factory';
+import { FirebaseModule } from 'src/firebase/firebase/firebase.module';
 
 function generateModulesSet() {
   const imports: ModuleMetadata['imports'] = [
@@ -137,6 +138,7 @@ function generateModulesSet() {
         i18nModule,
         loggerModule,
         MailModule,
+        FirebaseModule,
       ];
       break;
     case 'api':

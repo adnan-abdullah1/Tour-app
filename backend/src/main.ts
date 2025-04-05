@@ -33,7 +33,7 @@ async function bootstrap() {
     .addTag('tour')
     .build();
   const documentFactory = () => SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, documentFactory);
+  SwaggerModule.setup('docs', app, documentFactory);
 
   app.useLogger(app.get(Logger));
 

@@ -112,6 +112,8 @@ export class AuthService {
     const user = new UserEntity({
       email: dto.email,
       password: dto.password,
+      first_name: dto.firstName,
+      last_name: dto.lastName,
       createdBy: SYSTEM_USER_ID,
       updatedBy: SYSTEM_USER_ID,
     });

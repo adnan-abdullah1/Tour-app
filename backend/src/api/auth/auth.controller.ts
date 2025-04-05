@@ -2,6 +2,7 @@ import { CurrentUser } from '@/decorators/current-user.decorator';
 import { ApiAuth, ApiPublic } from '@/decorators/http.decorators';
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { FirebaseService } from 'src/firebase/firebase/firebase.service';
 import { AuthService } from './auth.service';
 import { LoginReqDto } from './dto/login.req.dto';
 import { LoginResDto } from './dto/login.res.dto';
@@ -17,7 +18,10 @@ import { JwtPayloadType } from './types/jwt-payload.type';
   version: '1',
 })
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly firebaseService: FirebaseService,
+  ) {}
 
   @ApiPublic({
     type: LoginResDto,
@@ -31,6 +35,9 @@ export class AuthController {
   @ApiPublic()
   @Post('email/register')
   async register(@Body() dto: RegisterReqDto): Promise<RegisterResDto> {
+    this.firebaseService.uploadImage(
+      '/home/adnan-abdullah/Desktop/Tour-app/backend/src/api/auth/image.png',
+    );
     return await this.authService.register(dto);
   }
 
