@@ -1,126 +1,225 @@
 # Architecture
 
----
-
-## Table of Contents <!-- omit in toc -->
-
-- [Hexagonal Architecture](#hexagonal-architecture)
-- [Motivation](#motivation)
-- [Description of the module structure](#description-of-the-module-structure)
-- [Recommendations](#recommendations)
-  - [Repository](#repository)
-- [FAQ](#faq)
-  - [Is there a way to generate a new resource (controller, service, DTOs, etc) with Hexagonal Architecture?](#is-there-a-way-to-generate-a-new-resource-controller-service-dtos-etc-with-hexagonal-architecture)
-- [Links](#links)
+This document describes the architecture of the project.
 
 ---
 
-## Hexagonal Architecture
+[[toc]]
 
-NestJS Boilerplate is based on [Hexagonal Architecture](https://en.wikipedia.org/wiki/Hexagonal_architecture_(software)). This architecture is also known as Ports and Adapters.
+## `.github/workflows`
 
-![Hexagonal Architecture Diagram](https://github.com/brocoders/nestjs-boilerplate/assets/6001723/6a6a763e-d1c9-43cc-910a-617cda3a71db)
+Here you can create and store yml files for each github action.
 
-## Motivation
+### `check-semantic-prs.yml`
 
-The main reason for using Hexagonal Architecture is to separate the business logic from the infrastructure. This separation allows us to easily change the database, the way of uploading files, or any other infrastructure without changing the business logic.
+Github action to check if the PR title is following the semantic commit message.
 
-## Description of the module structure
+### `ci.yml`
 
-```txt
-.
-├── domain
-│   └── [DOMAIN_ENTITY].ts
-├── dto
-│   ├── create.dto.ts
-│   ├── find-all.dto.ts
-│   └── update.dto.ts
-├── infrastructure
-│   └── persistence
-│       ├── document
-│       │   ├── document-persistence.module.ts
-│       │   ├── entities
-│       │   │   └── [SCHEMA].ts
-│       │   ├── mappers
-│       │   │   └── [MAPPER].ts
-│       │   └── repositories
-│       │       └── [ADAPTER].repository.ts
-│       ├── relational
-│       │   ├── entities
-│       │   │   └── [ENTITY].ts
-│       │   ├── mappers
-│       │   │   └── [MAPPER].ts
-│       │   ├── relational-persistence.module.ts
-│       │   └── repositories
-│       │       └── [ADAPTER].repository.ts
-│       └── [PORT].repository.ts
-├── controller.ts
-├── module.ts
-└── service.ts
-```
+Github action to run the test and build the project.
 
-`[DOMAIN ENTITY].ts` represents an entity used in the business logic. Domain entity has no dependencies on the database or any other infrastructure.
+### `deploy-docs.yml`
 
-`[SCHEMA].ts` represents the **database structure**. It is used in the document-oriented database (MongoDB).
+Github action to deploy the documentation to the `gh-pages` branch.
 
-`[ENTITY].ts` represents the **database structure**. It is used in the relational database (PostgreSQL).
+## `.husky`
 
-`[MAPPER].ts` is a mapper that converts **database entity** to **domain entity** and vice versa.
+Husky is a tool to prevent bad git commit, git push, and more. See [the husky doc](https://typicode.github.io/husky/) for more.
 
-`[PORT].repository.ts` is a repository **port** that defines the methods for interacting with the database.
+## `docs`
 
-`[ADAPTER].repository.ts` is a repository that implements the `[PORT].repository.ts`. It is used to interact with the database.
+Folder where we keep all our documentation files.
 
-`infrastructure` folder - contains all the infrastructure-related components such as `persistence`, `uploader`, `senders`, etc.
+### `.vuepress`
 
-Each component has `port` and `adapters`. `Port` is interface that define the methods for interacting with the infrastructure. `Adapters` are implementations of the `port`.
+Folder where we keep all our vuepress configuration files. See [the vuepress doc](https://vuepress.vuejs.org/) for more.
 
-## Recommendations
+## `src`
 
-### Repository
+Where we keep all our source files.
 
-Don't try to create universal methods in the repository because they are difficult to extend during the project's life. Instead of this create methods with a single responsibility.
+### `api`
 
-```typescript
-// ❌
-export class UsersRelationalRepository implements UserRepository {
-  async find(condition: UniversalConditionInterface): Promise<User> {
-    // ...
-  }
-}
+### `background`
 
-// ✅
-export class UsersRelationalRepository implements UserRepository {
-  async findByEmail(email: string): Promise<User> {
-    // ...
-  }
-  
-  async findByRoles(roles: string[]): Promise<User> {
-    // ...
-  }
-  
-  async findByIds(ids: string[]): Promise<User> {
-    // ...
-  }
-}
-```
+### `common`
 
----
+Where we keep common typescript files, e.g. DTOs, interfaces, types.
 
-## FAQ
+#### `dto`
 
-### Is there a way to generate a new resource (controller, service, DTOs, etc) with Hexagonal Architecture?
+Where we keep all our DTOs.
 
-Yes, you can use the [CLI](cli.md) to generate a new resource with Hexagonal Architecture.
+#### `interfaces`
 
----
+Where we keep all typescript [interfaces](https://www.typescriptlang.org/docs/handbook/interfaces.html).
 
-## Links
+#### `types`
 
-- [Dependency Inversion Principle](https://trilon.io/blog/dependency-inversion-principle) with NestJS.
+Where we keep all typescript [types](https://www.typescriptlang.org/docs/handbook/2/everyday-types.html).
 
----
+### `config`
 
-Previous: [Installing and Running](installing-and-running.md)
+Where we keep application configuration files.
 
-Next: [Command Line Interface](cli.md)
+### `constants`
+
+Where we keep all our constants.
+
+### `database`
+
+Folder to store files which are connected only to database.
+
+#### `config` (for database)
+
+Folder to store database configuration files.
+
+#### `decorators` (for database)
+
+Folder to store database decorators.
+
+#### `entities`
+
+Folder to store application common entities
+
+#### `migrations`
+
+Folder to store application migrations which will be generated by typeorm.
+
+#### `seeds`
+
+Folder to store application seeds, it adds necessary data for the development.
+
+#### `data-source.ts`
+
+File to store the data source configuration for migrations.
+
+### `decorators`
+
+This folder contains all global [decorators](https://www.typescriptlang.org/docs/handbook/decorators.html).
+
+### `exceptions`
+
+This folder contains all global exception classes.
+
+### `filters`
+
+In this folder you can find app level [filters](https://docs.nestjs.com/exception-filters).
+
+### `generated`
+
+Typescript files generated by the code generator. E.g. i18n.generated.ts file generated by [the nestjs-i18n](https://www.npmjs.com/package/nestjs-i18n) package.
+
+### `guards`
+
+You can store all guards here.
+
+### `i18n`
+
+Internalization JSON files are storied here.
+
+### `interceptors`
+
+Where we are keep [interceptors](https://docs.nestjs.com/interceptors).
+
+### `libs`
+
+Where we keep all common modules. See [NestJS modules documentation](https://docs.nestjs.com/modules) for more.
+
+### `mail`
+
+Includes a mailer service, implement the logic to send emails, use [nodemailer](https://nodemailer.com/about/) and handlebars for templating.
+
+### `shared`
+
+Shared module with global singleton services.
+
+### `utils`
+
+Where we keep all our utility functions.
+
+### `app.module.ts`
+
+The root application module.
+
+### `main.ts`
+
+## `test`
+
+Folder where we keep all our e2e test files.
+
+## `.env`
+
+Environment variables which will load before app start and will be stored in `process.env`, (*) is a env name (local, development, test, staging, production)
+
+## `.gitignore`
+
+Here you can store the files and folders that you want to ignore in the git repository.
+
+## `.prettierrc`
+
+Prettier configuration file, see [the prettier doc](https://prettier.io/) for more.
+
+## `commitlint.config.mjs`
+
+Commitlint configuration file, see [the commitlint doc](https://commitlint.js.org/) for more.
+
+## `docker-compose.yml`
+
+Docker compose configuration file for development, see [the docker docs](https://docs.docker.com/compose/compose-file/) for more.
+
+## `docker-compose.local.yml`
+
+Docker compose configuration file for local development.
+
+## `Dockerfile`
+
+The basic Dockerfile configuration to build the app, see [the docker docs](https://docs.docker.com/engine/reference/builder/) for more.
+
+## `eslint.config.mjs`
+
+Eslint configuration file, see [the eslint doc](https://eslint.org/) & [typescript-eslint](https://typescript-eslint.io/) for more.
+
+## `jest.config.json`
+
+Jest configuration file, see [the jest doc](https://jestjs.io/) for more.
+
+## `lint-staged.config.mjs`
+
+The configuration of the lint-staged, see [the lint-staged doc](https://github.com/lint-staged/lint-staged) for more.
+
+## `maildev.Dockefile`
+
+Dockerfile for the maildev service. Used for development & testing.
+
+## `nest-cli.json`
+
+Nestjs cli configuration file, see [the nestjs doc](https://docs.nestjs.com/) for more.
+
+## `package.json`
+
+Here you can store the configuration of the project.
+
+## `pnpm-lock.yaml`
+
+pnpm lock file generated by pnpm.
+
+## `README.md`
+
+Here you can store the description of the project.
+
+## `renovate.json`
+
+Renovate configuration file, see [the renovate doc](https://docs.renovatebot.com/) for more.
+
+## `setup-jest.mjs`
+
+Setup file for jest.
+
+## `tsconfig.build.json`
+
+Here you can store the typescript configuration of the project for the build.
+
+## `tsconfig.json`
+
+Here you can store the typescript configuration of the project.
