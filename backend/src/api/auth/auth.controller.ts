@@ -35,9 +35,6 @@ export class AuthController {
   @ApiPublic()
   @Post('email/register')
   async register(@Body() dto: RegisterReqDto): Promise<RegisterResDto> {
-    this.firebaseService.uploadImage(
-      '/home/adnan-abdullah/Desktop/Tour-app/backend/src/api/auth/image.png',
-    );
     return await this.authService.register(dto);
   }
 
