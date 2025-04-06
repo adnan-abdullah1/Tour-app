@@ -9,7 +9,6 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { PackageDepartureEntity } from './package_departures.entity';
-import { PackageHighlightEntity } from './package_highlights.entity';
 
 @Entity('package')
 export class PackageEntity extends AbstractEntity {
@@ -42,9 +41,9 @@ export class PackageEntity extends AbstractEntity {
   @DeleteDateColumn({ type: 'timestamp', name: 'deleted_at', default: null })
   deletedAt!: Date;
 
-  // // Departures relationship
+  // Departures relationship
   @OneToMany(() => PackageDepartureEntity, (pkg) => pkg.package, {
     cascade: true,
   })
-  departures!: PackageHighlightEntity[]; // List of departures for the package
+  departures!: PackageDepartureEntity[];
 }
