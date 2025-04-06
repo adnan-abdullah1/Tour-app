@@ -3,12 +3,11 @@ import { BullModule } from '@nestjs/bullmq';
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { FirebaseService } from 'src/firebase/firebase/firebase.service';
+import { FirebaseModule } from 'src/firebase/firebase/firebase.module';
 import { UserEntity } from '../user/entities/user.entity';
 import { UserModule } from '../user/user.module';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
-import { FirebaseModule } from 'src/firebase/firebase/firebase.module';
 
 @Module({
   imports: [
