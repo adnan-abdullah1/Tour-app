@@ -23,15 +23,23 @@ import {
 } from 'nestjs-i18n';
 import { LoggerModule } from 'nestjs-pino';
 import path from 'path';
+import firebaseConfig from 'src/firebase/config/firebase.config';
+import { FirebaseModule } from 'src/firebase/firebase/firebase.module';
 import { DataSource, DataSourceOptions } from 'typeorm';
 import loggerFactory from './logger-factory';
-import { FirebaseModule } from 'src/firebase/firebase/firebase.module';
 
 function generateModulesSet() {
   const imports: ModuleMetadata['imports'] = [
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [appConfig, databaseConfig, redisConfig, authConfig, mailConfig],
+      load: [
+        appConfig,
+        databaseConfig,
+        redisConfig,
+        authConfig,
+        mailConfig,
+        firebaseConfig,
+      ],
       envFilePath: ['.env'],
     }),
   ];

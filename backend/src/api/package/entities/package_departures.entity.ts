@@ -11,7 +11,7 @@ import {
 import { PackageEntity } from './package.entity';
 
 @Entity('package_departure')
-export class PackageElusionsEntity extends AbstractEntity {
+export class PackageDepartureEntity extends AbstractEntity {
   constructor(data?: Partial<any>) {
     super();
     Object.assign(this, data);

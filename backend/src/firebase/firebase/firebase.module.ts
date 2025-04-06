@@ -1,3 +1,4 @@
+import { AllConfigType } from '@/config/config.type';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import * as admin from 'firebase-admin';
@@ -6,16 +7,20 @@ import { FirebaseService } from './firebase.service';
 const firebaseProvider = {
   provide: 'FIREBASE_APP',
   inject: [ConfigService],
-  useFactory: (configService: ConfigService) => {
+  useFactory: (config: ConfigService<AllConfigType>) => {
     return admin.initializeApp({
       credential: admin.credential.cert({
-        projectId: configService.get<string>('FIREBASE_PROJECT_ID'),
-        clientEmail: configService.get<string>('FIREBASE_CLIENT_EMAIL'),
-        privateKey: configService
-          .get<string>('FIREBASE_PRIVATE_KEY')
+        projectId: config.get<string>('firebase.projectId', { infer: true }),
+        clientEmail: config.get<string>('firebase.clientEmail', {
+          infer: true,
+        }),
+        privateKey: config
+          .get<string>('firebase.privateKey', { infer: true })
           ?.replace(/\\n/g, '\n'),
       }),
-      storageBucket: configService.get<string>('FIREBASE_BUCKET_NAME'),
+      storageBucket: config.get<string>('firebase.storageBucket', {
+        infer: true,
+      }),
     });
   },
 };
