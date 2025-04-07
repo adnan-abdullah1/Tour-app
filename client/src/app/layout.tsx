@@ -1,18 +1,10 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import {  Inter } from "next/font/google";
 import "./globals.css";
 import HeaderView from "@/modules/shared/components/header/header-view";
 import FooterView from "@/modules/shared/components/footer/footer-view";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+const inter = Inter({ subsets: ['latin'] , weight: ['400', '500', '600', '700']})
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -27,10 +19,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head />
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <div className="layout-container">
+      
+      <body className={`${inter.className}  antialiased`}>
+        <div className="flex flex-col min-h-screen">
           <HeaderView />
-          <main className="main-content">{children}</main>
+          <main className="absolute">{children}</main>
           <FooterView />
         </div>
       </body>
