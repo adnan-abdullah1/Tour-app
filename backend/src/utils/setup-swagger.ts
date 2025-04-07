@@ -9,7 +9,7 @@ function setupSwagger(app: INestApplication) {
 
   const config = new DocumentBuilder()
     .setTitle(appName)
-    .setDescription('A boilerplate project')
+    .setDescription('Tour application API documentation')
     .setVersion('1.0')
     .setContact('Company Name', 'https://example.com', 'contact@company.com')
     .addBearerAuth()

@@ -1,3 +1,4 @@
+import { AbstractEntity } from '@/database/entities/abstract.entity';
 import {
   Column,
   Entity,
@@ -8,7 +9,12 @@ import {
 import { PackageEntity } from './package.entity'; // Import the PackageEntity
 
 @Entity('package_media')
-export class PackageMediaEntity {
+export class MediaEntity extends AbstractEntity {
+  constructor(data?: Partial<any>) {
+    super();
+    Object.assign(this, data);
+  }
+
   @PrimaryGeneratedColumn('uuid', {
     primaryKeyConstraintName: 'PK_package_media_id',
   })
@@ -21,7 +27,7 @@ export class PackageMediaEntity {
   url!: string;
 
   @Column({ type: 'text', nullable: true })
-  description?: string; // Optional description of the media file
+  description?: string;
 
   @ManyToOne(() => PackageEntity, (Package) => Package.media, {
     onDelete: 'CASCADE',
