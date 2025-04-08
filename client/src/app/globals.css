@@ -7,6 +7,7 @@ body {
   height: 100%;
   margin: 0;
   padding: 0;
+  overflow-x: hidden;
 }
 
 
@@ -45,6 +46,10 @@ body {
   --sidebar-accent-foreground: oklch(0.208 0.042 265.755);
   --sidebar-border: oklch(0.929 0.013 255.508);
   --sidebar-ring: oklch(0.704 0.04 256.788);
+  --tour-color-primary: #051036;
+  --tour-color-secondary:#445ec6;
+  --tour-bg-color-secondary-light:#e6e8ef;
+  --tour-bg-color-primary:#051036;;
 }
 
 .dark {
