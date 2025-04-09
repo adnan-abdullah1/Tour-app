@@ -12,11 +12,13 @@ import {
 export default function PopularDestinations() {
   const images = Array(5).fill({
     url: "https://gotrip-appdir.vercel.app/_next/image?url=%2Fimg%2Fdestinations%2F1%2F1.png&w=384&q=75",
-    name: "Bali, Indonesia"
+    name: "Bali, Indonesia",
+    location: "Westminster Borough, London",
+
   });
 
   return (
-    <div className="h-screen flex pt-[120px] justify-center">
+    <div className="h-[70vh] flex pt-[120px] justify-center">
       <div className="w-4/5">
         <p className="text-[var(--tour-color-primary)] font-bold">Popular Destinations</p>
         <div className="flex justify-between items-center mb-6">

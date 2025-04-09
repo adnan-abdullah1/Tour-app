@@ -1,11 +1,11 @@
 'use client';
 
-import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Menu, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
+
 
 const navLinks = [
   { label: "Home", href: "/" },
@@ -14,23 +14,13 @@ const navLinks = [
 ];
 
 export default function HeaderView() {
-  const [scrolled, setScrolled] = useState(false);
-
-  useEffect(() => {
-    const onScroll = () => {
-      setScrolled(window.scrollY > 10);
-    };
-
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
 
   return (
     <header
-      className={`fixed top-0 left-0 w-full z-50 transition-colors duration-300 shadow ${
-        scrolled ? "bg-[#051036]" : "bg-transparent"
-      }`}
+      className={"fixed top-0 left-0 w-full z-50 transition-colors duration-300 shadow bg-[#051036]" }
     >
+     
+
       <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
         <div className="flex">
           {/* Logo */}

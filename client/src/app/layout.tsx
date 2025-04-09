@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import {  Inter } from "next/font/google";
 import "./globals.css";
 import HeaderView from "@/modules/shared/components/header/header-view";
-import FooterView from "@/modules/shared/components/footer/footer-view";
+import FooterView from "@/modules/home/components/footer-view";
 
 const inter = Inter({ subsets: ['latin'] , weight: ['400', '500', '600', '700']})
 
@@ -19,15 +19,18 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head />
-      
-      <body className={`${inter.className}  antialiased`}>
-        <div className="flex flex-col min-h-screen">
+      <body className={`${inter.className} antialiased `}>
+        <div className="flex flex-col min-h-screen  ">
           <HeaderView />
-          <main className="absolute">{children}</main>
+          
+          {/* main should grow to fill the space between header and footer */}
+          <main className="flex-1">{children}</main>
+          
           <FooterView />
         </div>
       </body>
     </html>
   );
 }
+
 
