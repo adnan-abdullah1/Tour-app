@@ -11,7 +11,7 @@ import {
 import { PackageEntity } from './package.entity';
 
 @Entity('package_departure')
-export class PackageDepartureEntity extends AbstractEntity {
+export class DepartureEntity extends AbstractEntity {
   constructor(data?: Partial<any>) {
     super();
     Object.assign(this, data);
@@ -39,9 +39,9 @@ export class PackageDepartureEntity extends AbstractEntity {
   @Column({ type: 'numeric' })
   price!: number;
 
-  @ManyToOne(() => PackageEntity, (Package) => Package.departures, {
+  @ManyToOne('PackageEntity', 'departure', {
     onDelete: 'CASCADE',
   })
-  @JoinColumn({ name: 'package_id' }) // Fk column
-  package!: PackageEntity; // Reference to the PackageEntity
+  @JoinColumn({ name: 'package_id' })
+  package!: PackageEntity;
 }

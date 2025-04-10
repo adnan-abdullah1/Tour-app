@@ -36,7 +36,7 @@ NODE_ENV=development
 MODULES_SET=monolith
 
 ##== Application
-APP_NAME="NestJS API"
+APP_NAME="Tour App"
 APP_URL=http://localhost:3000
 APP_PORT=3000
 APP_DEBUG=false

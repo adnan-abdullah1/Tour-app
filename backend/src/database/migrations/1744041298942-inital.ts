@@ -1,7 +1,7 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
-export class Inital1743931378249 implements MigrationInterface {
-    name = 'Inital1743931378249'
+export class Inital1744041298942 implements MigrationInterface {
+    name = 'Inital1744041298942'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`
@@ -59,22 +59,18 @@ export class Inital1743931378249 implements MigrationInterface {
             WHERE "deleted_at" IS NULL
         `);
         await queryRunner.query(`
-            CREATE TABLE "package_highlights" (
-                "id" uuid NOT NULL DEFAULT uuid_generate_v4(),
-                "description" text NOT NULL,
-                "package_id" uuid,
-                CONSTRAINT "PK_package_highlights_id" PRIMARY KEY ("id")
-            )
+            CREATE TYPE "public"."package_status_enum" AS ENUM('active', 'inactive', 'archived')
         `);
         await queryRunner.query(`
             CREATE TABLE "package" (
                 "id" uuid NOT NULL DEFAULT uuid_generate_v4(),
                 "name" character varying NOT NULL,
-                "nights" integer NOT NULL,
-                "days" integer NOT NULL,
-                "rating" integer NOT NULL DEFAULT '0',
+                "rating" integer DEFAULT '0',
                 "price" numeric(10, 2) NOT NULL,
+                "inclusions" text NOT NULL,
+                "exclusions" text NOT NULL,
                 "deleted_at" TIMESTAMP,
+                "status" "public"."package_status_enum" NOT NULL DEFAULT 'inactive',
                 "created_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
                 "created_by" character varying NOT NULL,
                 "updated_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
@@ -83,27 +79,17 @@ export class Inital1743931378249 implements MigrationInterface {
             )
         `);
         await queryRunner.query(`
-            CREATE TABLE "package_inclusions" (
+            CREATE TABLE "package_media" (
                 "id" uuid NOT NULL DEFAULT uuid_generate_v4(),
-                "package_id" uuid NOT NULL,
-                "description" text NOT NULL,
-                "created_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
-                "created_by" character varying NOT NULL,
-                "updated_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
-                "updated_by" character varying NOT NULL,
-                CONSTRAINT "PK_package_inclusions_id" PRIMARY KEY ("id")
-            )
-        `);
-        await queryRunner.query(`
-            CREATE TABLE "package_exclusions" (
-                "id" uuid NOT NULL DEFAULT uuid_generate_v4(),
-                "description" text NOT NULL,
+                "type" text NOT NULL,
+                "url" text NOT NULL,
+                "description" text,
                 "package_id" uuid,
                 "created_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
                 "created_by" character varying NOT NULL,
                 "updated_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
                 "updated_by" character varying NOT NULL,
-                CONSTRAINT "PK_package_exclusions_id" PRIMARY KEY ("id")
+                CONSTRAINT "PK_package_media_id" PRIMARY KEY ("id")
             )
         `);
         await queryRunner.query(`
@@ -129,16 +115,8 @@ export class Inital1743931378249 implements MigrationInterface {
             ADD CONSTRAINT "FK_session_user" FOREIGN KEY ("user_id") REFERENCES "user"("id") ON DELETE NO ACTION ON UPDATE NO ACTION
         `);
         await queryRunner.query(`
-            ALTER TABLE "package_highlights"
-            ADD CONSTRAINT "FK_3a5bd1be5a803e8f8fffcbfab0f" FOREIGN KEY ("package_id") REFERENCES "package"("id") ON DELETE CASCADE ON UPDATE NO ACTION
-        `);
-        await queryRunner.query(`
-            ALTER TABLE "package_inclusions"
-            ADD CONSTRAINT "FK_90940ac72d2f670186f5b46fba3" FOREIGN KEY ("package_id") REFERENCES "package"("id") ON DELETE CASCADE ON UPDATE NO ACTION
-        `);
-        await queryRunner.query(`
-            ALTER TABLE "package_exclusions"
-            ADD CONSTRAINT "FK_1b2504011c5756f2971ea18875f" FOREIGN KEY ("package_id") REFERENCES "package"("id") ON DELETE CASCADE ON UPDATE NO ACTION
+            ALTER TABLE "package_media"
+            ADD CONSTRAINT "FK_a608cbbc961d1af22808fc00cb0" FOREIGN KEY ("package_id") REFERENCES "package"("id") ON DELETE CASCADE ON UPDATE NO ACTION
         `);
         await queryRunner.query(`
             ALTER TABLE "package_departure"
@@ -151,13 +129,7 @@ export class Inital1743931378249 implements MigrationInterface {
             ALTER TABLE "package_departure" DROP CONSTRAINT "FK_686ddcd72eec825dde80ba66510"
         `);
         await queryRunner.query(`
-            ALTER TABLE "package_exclusions" DROP CONSTRAINT "FK_1b2504011c5756f2971ea18875f"
-        `);
-        await queryRunner.query(`
-            ALTER TABLE "package_inclusions" DROP CONSTRAINT "FK_90940ac72d2f670186f5b46fba3"
-        `);
-        await queryRunner.query(`
-            ALTER TABLE "package_highlights" DROP CONSTRAINT "FK_3a5bd1be5a803e8f8fffcbfab0f"
+            ALTER TABLE "package_media" DROP CONSTRAINT "FK_a608cbbc961d1af22808fc00cb0"
         `);
         await queryRunner.query(`
             ALTER TABLE "session" DROP CONSTRAINT "FK_session_user"
@@ -169,16 +141,13 @@ export class Inital1743931378249 implements MigrationInterface {
             DROP TABLE "package_departure"
         `);
         await queryRunner.query(`
-            DROP TABLE "package_exclusions"
-        `);
-        await queryRunner.query(`
-            DROP TABLE "package_inclusions"
+            DROP TABLE "package_media"
         `);
         await queryRunner.query(`
             DROP TABLE "package"
         `);
         await queryRunner.query(`
-            DROP TABLE "package_highlights"
+            DROP TYPE "public"."package_status_enum"
         `);
         await queryRunner.query(`
             DROP INDEX "public"."UQ_user_email"
