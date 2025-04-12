@@ -13,7 +13,7 @@ export default async function PackageView({
 }) {
   const { packageId } = await params;
   return (
-    <div className=" h-screen">
+    <div >
       <PackageDetails />
       <PackageHighlight />
       <PackagePlaceToSee />
