@@ -33,7 +33,7 @@ export default function PackagePlaceToSee() {
 
   return (
     <div className="p-6 bg-white rounded-xl shadow-sm">
-      <h2 className="text-xl font-semibold text-gray-800 mb-4 border-l-4 border-red-500 pl-3">
+      <h2 className="text-xl font-semibold text-gray-800 mb-4 border-l-4 border-[var(--tour-color-primary)] pl-3">
         Places You'll See
       </h2>
 
