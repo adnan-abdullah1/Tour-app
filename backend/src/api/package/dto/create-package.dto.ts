@@ -1,23 +1,27 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { IsOptional, IsString } from 'class-validator';
+import { DateField, StringField } from '@/decorators/field.decorators';
+import { IsOptional } from 'class-validator';
 
 export class CreatePackageDto {
-  @ApiProperty({ example: 'kashmir trip' })
-  @IsString()
+  @StringField()
   name!: string;
 
-  @ApiProperty({ example: 'Accommodation on twin sharing basis\nMeals ' })
   @IsOptional()
-  @IsString()
+  @StringField()
   inclusions!: string;
 
-  @ApiProperty({ example: 'Cost of Rail\nHotel tariff charges.' })
   @IsOptional()
-  @IsString()
+  @StringField()
   exclusions!: string;
 
-  @ApiProperty({ example: 'Short Break at shalimar' })
   @IsOptional()
-  @IsString()
+  @StringField()
   highlights!: string;
+
+  @IsOptional()
+  @DateField()
+  startDate: Date;
+
+  @IsOptional()
+  @DateField()
+  endDate: Date;
 }

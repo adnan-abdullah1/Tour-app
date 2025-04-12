@@ -5,15 +5,12 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
-  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { DepartureEntity } from './departure.entity';
-import { MediaEntity } from './media.entity';
 
 @Entity('package')
 export class PackageEntity extends AbstractEntity {
-  constructor(data?: Partial<any>) {
+  constructor(data?: Partial<PackageEntity>) {
     super();
     Object.assign(this, data);
   }
@@ -45,6 +42,12 @@ export class PackageEntity extends AbstractEntity {
   @DeleteDateColumn({ type: 'timestamp', name: 'deleted_at', default: null })
   deletedAt!: Date;
 
+  @Column({ type: 'json', nullable: true })
+  daysPlan: Array<{ day: number; plan: string }>; // eg., { day: 1, plan: 'Day 1 Plan' },...]
+
+  @Column({ type: 'json', nullable: true })
+  media?: Array<{ url: string; path: string }>;
+
   @Column({
     type: 'enum',
     enum: ['active', 'inactive', 'archived'],
@@ -52,15 +55,17 @@ export class PackageEntity extends AbstractEntity {
   })
   status!: 'active' | 'inactive' | 'archived';
 
-  // Departures relationship
-  @OneToMany('DepartureEntity', 'package', {
-    cascade: true,
+  @Column({
+    name: 'start_date',
+    type: 'date',
+    nullable: true,
   })
-  departure!: DepartureEntity[];
+  startDate!: Date;
 
-  // Media relationship
-  @OneToMany('MediaEntity', 'media', {
-    cascade: true,
+  @Column({
+    name: 'end_date',
+    type: 'date',
+    nullable: true,
   })
-  media!: MediaEntity[];
+  endDate!: Date;
 }

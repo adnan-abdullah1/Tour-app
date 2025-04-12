@@ -7,15 +7,10 @@ import {
   Get,
   Param,
   ParseUUIDPipe,
-  Patch,
   Post,
-  Put,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
-import { CreateDepartureDto } from './dto/create-departure.dto';
+import { ApiParam, ApiTags } from '@nestjs/swagger';
 import { CreatePackageDto } from './dto/create-package.dto';
-import { UpdateDepartureDto } from './dto/update-departure.dto';
-import { UpdatePackageDto } from './dto/update-package.dto';
 import { PackageService } from './package.service';
 
 @ApiTags('package')
@@ -32,45 +27,44 @@ export class PackageController {
     return await this.packageService.createPackage(dto);
   }
 
-  @Get()
-  findAll() {
-    return this.packageService.findAll();
+  @ApiPublic({
+    summary: 'Soft Delete package',
+  })
+  @ApiParam({
+    name: 'id',
+    description: 'Unique identifier of the package to be deleted.',
+    type: String,
+    example: '123e4567-e89b-12d3-a456-426614174000',
+  })
+  @Delete(':id')
+  async deletePackage(@Param('id', ParseUUIDPipe) id: Uuid) {
+    return await this.packageService.deletePackage(id);
+  }
+
+  @ApiPublic({
+    summary: 'Get package by id',
+  })
+  @ApiParam({
+    name: 'id',
+    description: 'Get package by id',
+    type: String,
+    example: '123e4567-e89b-12d3-a456-426614174000',
+  })
+  @ApiPublic({
+    summary: 'Get all packages',
+  })
+  @ApiParam({
+    name: 'id',
+    description: 'Get all packages',
+    type: String,
+  })
+  @Get('')
+  async getAllPackages(@Param('id', ParseUUIDPipe) id: Uuid) {
+    return await this.packageService.getPackageById(id);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.packageService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePackageDto: UpdatePackageDto) {
-    return this.packageService.update(+id, updatePackageDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.packageService.remove(+id);
-  }
-
-  // departure controller
-  @ApiPublic({
-    type: CreatePackageDto,
-    summary: 'Create Departures',
-  })
-  @Post('/departure')
-  createDeparture(@Body() dto: CreateDepartureDto) {
-    return this.packageService.createDeparture(dto);
-  }
-
-  @ApiPublic({
-    type: CreatePackageDto,
-    summary: 'Create Departures',
-  })
-  @Put('/departure/:id')
-  updateDeparture(
-    @Param('id', ParseUUIDPipe) id: Uuid,
-    @Body() dto: UpdateDepartureDto,
-  ) {
-    return this.packageService.updateDeparture(id, dto);
+  async getPackageById(@Param('id', ParseUUIDPipe) id: Uuid) {
+    return await this.packageService.getPackageById(id);
   }
 }

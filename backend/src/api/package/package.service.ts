@@ -1,17 +1,14 @@
 import { Uuid } from '@/common/types/common.type';
 import { SYSTEM_USER_ID } from '@/constants/app.constant';
-import { ErrorCode } from '@/constants/error-code.constant';
-import { ValidationException } from '@/exceptions/validation.exception';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { plainToInstance } from 'class-transformer';
-import { Not, Repository } from 'typeorm';
-import { CreateDepartureDto } from './dto/create-departure.dto';
+import { FirebaseService } from 'src/firebase/firebase/firebase.service';
+import { Repository } from 'typeorm';
 import { CreatePackageDto } from './dto/create-package.dto';
-import { UpdateDepartureDto } from './dto/update-departure.dto';
-import { UpdatePackageDto } from './dto/update-package.dto';
 import { DepartureEntity } from './entities/departure.entity';
 import { PackageEntity } from './entities/package.entity';
+import { MediaType } from './types/package.types';
 
 @Injectable()
 export class PackageService {
@@ -20,6 +17,7 @@ export class PackageService {
     private readonly packageRepository: Repository<PackageEntity>,
     @InjectRepository(DepartureEntity)
     private readonly departureRepository: Repository<DepartureEntity>,
+    private readonly firebaseService: FirebaseService,
   ) {}
 
   async createPackage(dto: CreatePackageDto) {
@@ -28,6 +26,8 @@ export class PackageService {
       inclusions: dto.inclusions,
       exclusions: dto.exclusions,
       highlights: dto.highlights,
+      startDate: dto.startDate,
+      endDate: dto.endDate,
       createdBy: SYSTEM_USER_ID,
       updatedBy: SYSTEM_USER_ID,
     });
@@ -38,81 +38,55 @@ export class PackageService {
     });
   }
 
-  findAll() {
-    return `This action returns all package`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} package`;
-  }
-
-  update(id: number, updatePackageDto: UpdatePackageDto) {
-    return `This action updates a #${id} package`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} package`;
-  }
-
-  // departure related functions
-  async createDeparture(dto: CreateDepartureDto) {
-    // check if package id exists and is not archived
-    const isExistPackage = await PackageEntity.exists({
-      where: {
-        id: dto.packageId as Uuid,
-        status: Not('archived' as 'active' | 'inactive' | 'archived'),
-      },
-    });
-
-    if (!isExistPackage) {
-      throw new ValidationException(ErrorCode.E004);
+  // soft delete package
+  async deletePackage(id: Uuid) {
+    const Package = await this.packageRepository.findOne({ where: { id } });
+    if (!Package) {
+      throw new NotFoundException(`Package not found with id ${id}`);
     }
 
-    // check if start date is in past
-    if (new Date(dto.startDate) < new Date()) {
-      throw new ValidationException(ErrorCode.E005);
-    }
-    // check if end date is in past
-    if (new Date(dto.endDate) < new Date()) {
-      throw new ValidationException(ErrorCode.E005);
-    }
-    // check if start date is greater than end date
-    if (new Date(dto.startDate) > new Date(dto.endDate)) {
-      throw new ValidationException(ErrorCode.E005);
-    }
-
-    const Departure = new DepartureEntity({
-      startDate: dto.startDate,
-      endDate: dto.endDate,
-      price: dto.price,
-      package: dto.packageId,
-      createdBy: SYSTEM_USER_ID,
-      updatedBy: SYSTEM_USER_ID,
-    });
-
-    await Departure.save();
-    return plainToInstance(CreatePackageDto, {
-      packageId: Departure.id,
-    });
+    Package.deletedAt = new Date();
+    await this.packageRepository.save(Package);
+    return;
   }
 
-  // update departure
-  async updateDeparture(id: Uuid, dto: UpdateDepartureDto) {
-    // this finds by id and does automatically left join
-    const departure = await DepartureEntity.findOne({
+  // get package by id
+  async getPackageById(id: Uuid) {
+    const Package = await this.packageRepository.findOne({
       where: { id },
-      relations: ['package'],
     });
-
-    if (!departure) {
-      throw new NotFoundException('Departure not found');
+    if (!Package) {
+      throw new NotFoundException(`Package not found with id ${id}`);
     }
 
-    // Only update provided fields
-    if (dto.startDate) departure.startDate = new Date(dto.startDate);
-    if (dto.endDate) departure.endDate = new Date(dto.endDate);
-    if (dto.price !== undefined) departure.price = dto.price;
+    return Package;
+  }
 
-    return DepartureEntity.save(departure);
+  async uploadPackageMedia(files: Express.Multer.File[], packageId: Uuid) {
+    try {
+      const packageMedia: Array<MediaType> =
+        await this.firebaseService.uploadPackageMedia(files, packageId);
+      await this.saveMediaUrls(packageMedia, packageId);
+    } catch (err) {
+      //we need to add log to keep track fo what happened while uploading to firebase
+      console.log(err);
+    }
+  }
+
+  // save media urls
+  async saveMediaUrls(packageMedia: Array<MediaType>, id: Uuid) {
+    try {
+      const Package = await PackageEntity.findOne({ where: { id } });
+      if (!Package) {
+        throw new NotFoundException(
+          `no package was found with given  packageId ${id}`,
+        );
+      }
+
+      Package.media = [...(Package.media || []), ...packageMedia];
+      await this.packageRepository.save(Package);
+    } catch (err) {
+      throw new Error(err);
+    }
   }
 }
