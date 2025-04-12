@@ -1,7 +1,7 @@
-export default function PackageView(){
+export default function PackagesView(){
     return (
         <div className="bg-green h-screen">
-                 <h1>Package View</h1>
+                 <h1>Packages View</h1>
         </div>
        
     )

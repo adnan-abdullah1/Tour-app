@@ -17,7 +17,7 @@ export default function HeaderView() {
 
   return (
     <header
-      className={"fixed top-0 left-0 w-full z-50 transition-colors duration-300 shadow bg-[#051036]" }
+      className={" top-0 left-0 w-full z-50 transition-colors duration-300 shadow bg-[#051036]" }
     >
      
 

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import {  Inter } from "next/font/google";
 import "./globals.css";
 import HeaderView from "@/modules/shared/components/header/header-view";
-import FooterView from "@/modules/home/components/footer-view";
+import FooterView from "@/modules/shared/components/footer-view";
 
 const inter = Inter({ subsets: ['latin'] , weight: ['400', '500', '600', '700']})
 
@@ -24,7 +24,7 @@ export default function RootLayout({
           <HeaderView />
           
           {/* main should grow to fill the space between header and footer */}
-          <main className="flex-1">{children}</main>
+          <main className="flex-1 ">{children}</main>
           
           <FooterView />
         </div>
