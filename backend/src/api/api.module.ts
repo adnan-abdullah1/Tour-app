@@ -4,6 +4,7 @@ import { HealthModule } from './health/health.module';
 import { HomeModule } from './home/home.module';
 import { PackageModule } from './package/package.module';
 import { PostModule } from './post/post.module';
+import { PropertyModule } from './property/property.module';
 import { UserModule } from './user/user.module';
 
 @Module({
@@ -14,6 +15,7 @@ import { UserModule } from './user/user.module';
     HomeModule,
     PostModule,
     PackageModule,
+    PropertyModule,
   ],
 })
 export class ApiModule {}

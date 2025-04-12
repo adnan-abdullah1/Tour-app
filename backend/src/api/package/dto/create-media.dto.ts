@@ -1,5 +1,6 @@
+import { StringField } from '@/decorators/field.decorators';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsOptional, IsString } from 'class-validator';
+import { IsOptional } from 'class-validator';
 
 export class CreateMediaDto {
   @ApiProperty({ type: 'string', format: 'binary' })
@@ -7,6 +8,6 @@ export class CreateMediaDto {
 
   @ApiProperty({ example: 'cover photo', required: false })
   @IsOptional()
-  @IsString()
+  @StringField()
   label?: string;
 }
