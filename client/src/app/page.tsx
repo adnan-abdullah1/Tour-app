@@ -10,7 +10,7 @@ export default function Home() {
     <HomeView />
     <PopularDestinations />
     <RecommendedDestinations />
-    <Subscribe />
+    
     </>
       
   );

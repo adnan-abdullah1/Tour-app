@@ -8,6 +8,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import { TypographyExtraSmallMuted } from "@/components/ui/typography";
 
 export default function PopularDestinations() {
   const images = Array(5).fill({
@@ -21,10 +22,10 @@ export default function PopularDestinations() {
     <div className="h-[70vh] flex pt-[120px] justify-center">
       <div className="w-4/5">
         <p className="text-[var(--tour-color-primary)] font-bold">Popular Destinations</p>
-        <div className="flex justify-between items-center mb-6">
-          <span className="text-xs text-gray-400">
+        <div className="flex justify-between items-start mb-6">
+          <TypographyExtraSmallMuted>
             These popular destinations have a lot to offer
-          </span>
+          </TypographyExtraSmallMuted>
           <span className="text-sm bg-[var(--tour-bg-color-secondary-light)]
             hover:bg-[var(--tour-bg-color-primary)] text-[var(--tour-color-secondary)]
             hover:text-white p-2.5 cursor-pointer rounded-md transition ease-in-out duration-500">

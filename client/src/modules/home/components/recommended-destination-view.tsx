@@ -1,6 +1,7 @@
 "use client"
 import { Card } from "@/components/ui/card";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+import { TypographyExtraSmallMuted } from "@/components/ui/typography";
 import Image from "next/image";
 
 export default function RecommendedDestinations() {
@@ -18,9 +19,9 @@ export default function RecommendedDestinations() {
             <div className="w-4/5">
                 <p className="text-[var(--tour-color-primary)] font-bold">Recommended Tours</p>
                 <div className="flex justify-between items-center mb-6">
-                    <span className="text-xs text-gray-400">
+                    <TypographyExtraSmallMuted>
                         These popular destinations have a lot to offer
-                    </span>
+                    </TypographyExtraSmallMuted>
 
                 </div>
 

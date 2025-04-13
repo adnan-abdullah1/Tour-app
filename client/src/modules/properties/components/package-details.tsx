@@ -1,4 +1,5 @@
 import { Button } from '@/components/ui/button';
+import { TypographyExtraSmallMuted } from '@/components/ui/typography';
 import Image from 'next/image';
 
 export default async function PackageDetails() {
@@ -7,8 +8,8 @@ export default async function PackageDetails() {
       <div className='grid  sm:grid-cols-12 p-4 mt-4 '>
         <div className='col-span-12  sm:col-span-6 flex flex-col'>
           <span>The Montcalm At Brewery London City</span>
-          <span>Westminster Borough, London
-          </span>
+          <TypographyExtraSmallMuted>Westminster Borough, London
+          </TypographyExtraSmallMuted>
         </div>
         <div className='col-span-12 sm:col-span-6 flex flex-col md:flex-row justify-center md:justify-end items-center gap-y-4 md:gap-y-0 gap-x-0 md:gap-x-2'>
           <span>from 72</span>

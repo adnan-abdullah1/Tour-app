@@ -3,6 +3,7 @@ import {  Inter } from "next/font/google";
 import "./globals.css";
 import HeaderView from "@/modules/shared/components/header/header-view";
 import FooterView from "@/modules/shared/components/footer-view";
+import Subscribe from "@/modules/home/components/subscribe-view";
 
 const inter = Inter({ subsets: ['latin'] , weight: ['400', '500', '600', '700']})
 
@@ -25,8 +26,11 @@ export default function RootLayout({
           
           {/* main should grow to fill the space between header and footer */}
           <main className="flex-1 ">{children}</main>
-          
+          <div>
+          <Subscribe />
           <FooterView />
+          </div>
+         
         </div>
       </body>
     </html>
