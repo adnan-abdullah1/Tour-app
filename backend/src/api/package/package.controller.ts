@@ -8,9 +8,11 @@ import {
   Param,
   ParseUUIDPipe,
   Post,
+  Query,
 } from '@nestjs/common';
 import { ApiParam, ApiTags } from '@nestjs/swagger';
 import { CreatePackageDto } from './dto/create-package.dto';
+import { ListPackageReqDto } from './dto/list-package.req.dto';
 import { PackageService } from './package.service';
 
 @ApiTags('package')
@@ -42,6 +44,14 @@ export class PackageController {
   }
 
   @ApiPublic({
+    summary: 'Get all packages with pagination',
+  })
+  @Get('')
+  async getAllPackages(@Query() reqDto: ListPackageReqDto) {
+    return await this.packageService.getAllPackages(reqDto);
+  }
+
+  @ApiPublic({
     summary: 'Get package by id',
   })
   @ApiParam({
@@ -50,19 +60,6 @@ export class PackageController {
     type: String,
     example: '123e4567-e89b-12d3-a456-426614174000',
   })
-  @ApiPublic({
-    summary: 'Get all packages',
-  })
-  @ApiParam({
-    name: 'id',
-    description: 'Get all packages',
-    type: String,
-  })
-  @Get('')
-  async getAllPackages(@Param('id', ParseUUIDPipe) id: Uuid) {
-    return await this.packageService.getPackageById(id);
-  }
-
   @Get(':id')
   async getPackageById(@Param('id', ParseUUIDPipe) id: Uuid) {
     return await this.packageService.getPackageById(id);

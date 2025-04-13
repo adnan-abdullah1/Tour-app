@@ -1,11 +1,15 @@
+import { OffsetPaginatedDto } from '@/common/dto/offset-pagination/paginated.dto';
 import { Uuid } from '@/common/types/common.type';
 import { SYSTEM_USER_ID } from '@/constants/app.constant';
+import { paginate } from '@/utils/offset-pagination';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { plainToInstance } from 'class-transformer';
 import { FirebaseService } from 'src/firebase/firebase/firebase.service';
 import { Repository } from 'typeorm';
 import { CreatePackageDto } from './dto/create-package.dto';
+import { ListPackageReqDto } from './dto/list-package.req.dto';
+import { PackageResponseDto } from './dto/package-res-dto';
 import { DepartureEntity } from './entities/departure.entity';
 import { PackageEntity } from './entities/package.entity';
 import { MediaType } from './types/package.types';
@@ -23,11 +27,16 @@ export class PackageService {
   async createPackage(dto: CreatePackageDto) {
     const Package = new PackageEntity({
       name: dto.name,
+      location: dto.location,
+      description: dto.description,
+      price: dto.price,
+      redirectUrl: dto.redirectUrl,
       inclusions: dto.inclusions,
       exclusions: dto.exclusions,
       highlights: dto.highlights,
       startDate: dto.startDate,
       endDate: dto.endDate,
+      daysPlan: dto.daysPlan,
       createdBy: SYSTEM_USER_ID,
       updatedBy: SYSTEM_USER_ID,
     });
@@ -48,6 +57,23 @@ export class PackageService {
     Package.deletedAt = new Date();
     await this.packageRepository.save(Package);
     return;
+  }
+
+  // get paginated packages
+  async getAllPackages(
+    reqDto: ListPackageReqDto,
+  ): Promise<OffsetPaginatedDto<PackageResponseDto>> {
+    const query = this.packageRepository
+      .createQueryBuilder('user')
+      .orderBy('user.createdAt', 'DESC');
+    const [users, metaDto] = await paginate<PackageEntity>(query, reqDto, {
+      skipCount: false,
+      takeAll: false,
+    });
+    return new OffsetPaginatedDto(
+      plainToInstance(PackageResponseDto, users),
+      metaDto,
+    );
   }
 
   // get package by id

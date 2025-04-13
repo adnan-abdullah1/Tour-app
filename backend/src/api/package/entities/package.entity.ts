@@ -21,6 +21,15 @@ export class PackageEntity extends AbstractEntity {
   @Column()
   name!: string;
 
+  @Column({ type: 'varchar', length: 255, default: '', nullable: true })
+  location!: string;
+
+  @Column({ type: 'text', nullable: true })
+  description!: string;
+
+  @Column({ type: 'text', nullable: true, default: '' })
+  redirectUrl!: string;
+
   @Column({ type: 'int', default: 0, nullable: true })
   rating!: number;
 
@@ -33,9 +42,6 @@ export class PackageEntity extends AbstractEntity {
   @Column({ type: 'text', nullable: true })
   exclusions!: string;
 
-  @Column({ type: 'text', nullable: true })
-  highlights!: string;
-
   @CreateDateColumn({ type: 'timestamp', name: 'created_at' })
   declare createdAt: Date;
 
@@ -43,7 +49,7 @@ export class PackageEntity extends AbstractEntity {
   deletedAt!: Date;
 
   @Column({ type: 'json', nullable: true })
-  daysPlan: Array<{ day: number; plan: string }>; // eg., { day: 1, plan: 'Day 1 Plan' },...]
+  daysPlan: Array<{ day: number; plan: string; description: string }>; // eg., { day: 1, plan: 'Day 1 Plan' },...]
 
   @Column({ type: 'json', nullable: true })
   media?: Array<{ url: string; path: string }>;
@@ -68,4 +74,7 @@ export class PackageEntity extends AbstractEntity {
     nullable: true,
   })
   endDate!: Date;
+
+  @Column({ type: 'json', nullable: true })
+  highlights!: Array<{ icon: string; description: string }>;
 }
