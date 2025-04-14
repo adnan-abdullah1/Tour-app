@@ -42,8 +42,8 @@ export class PackageService {
     });
 
     await Package.save();
-    return plainToInstance(CreatePackageDto, {
-      packageId: Package.id,
+    return plainToInstance(PackageResponseDto, {
+      id: Package.id,
     });
   }
 
@@ -96,6 +96,7 @@ export class PackageService {
     } catch (err) {
       //we need to add log to keep track fo what happened while uploading to firebase
       console.log(err);
+      throw new Error(err);
     }
   }
 

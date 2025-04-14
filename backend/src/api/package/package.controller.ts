@@ -1,6 +1,7 @@
 import { Uuid } from '@/common/types/common.type';
 import { ApiPublic } from '@/decorators/http.decorators';
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -9,12 +10,36 @@ import {
   ParseUUIDPipe,
   Post,
   Query,
+  UploadedFiles,
+  UseInterceptors,
 } from '@nestjs/common';
+import { FilesInterceptor } from '@nestjs/platform-express';
 import { ApiParam, ApiTags } from '@nestjs/swagger';
 import { CreatePackageDto } from './dto/create-package.dto';
 import { ListPackageReqDto } from './dto/list-package.req.dto';
+import { PackageResponseDto } from './dto/package-res-dto';
 import { PackageService } from './package.service';
 
+const allowedMimeTypes = [
+  'image/jpeg',
+  'image/png',
+  'image/gif',
+  'video/mp4',
+  'video/mpeg',
+];
+
+const fileFilter = (req, file, callback) => {
+  if (allowedMimeTypes.includes(file.mimetype)) {
+    callback(null, true);
+  } else {
+    callback(
+      new BadRequestException('Only image and video files are allowed!'),
+      false,
+    );
+  }
+};
+
+const maxSize = 5 * 1024 * 1024;
 @ApiTags('package')
 @Controller('package')
 export class PackageController {
@@ -24,9 +49,32 @@ export class PackageController {
     type: CreatePackageDto,
     summary: 'Create Package',
   })
+  @UseInterceptors(
+    FilesInterceptor('files', 10, {
+      fileFilter: fileFilter,
+      limits: { fileSize: maxSize },
+    }),
+  )
   @Post()
-  async createPackage(@Body() dto: CreatePackageDto) {
-    return await this.packageService.createPackage(dto);
+  async createPackage(
+    @Body() dto: CreatePackageDto,
+    @UploadedFiles() files: Express.Multer.File[],
+  ) {
+    try {
+      const data: PackageResponseDto =
+        await this.packageService.createPackage(dto);
+
+      if (!files || files.length === 0) {
+        return data;
+      }
+
+      // Upload media files for the package and save the media ids in db
+      await this.packageService.uploadPackageMedia(files, data.id);
+      return data;
+    } catch (err) {
+      console.error(err);
+      throw new BadRequestException(err.message);
+    }
   }
 
   @ApiPublic({

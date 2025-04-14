@@ -76,4 +76,29 @@ export class CreatePackageDto {
   })
   @IsOptional()
   highlights!: Array<{ icon: string; description: string }>;
+
+  @ApiProperty({
+    description: 'Array of media objects containing file and optional label',
+    type: 'array',
+    items: {
+      type: 'object',
+      properties: {
+        file: {
+          type: 'string',
+          format: 'binary',
+          description: 'The media file',
+        },
+        label: {
+          type: 'string',
+          description: 'Optional label for the media file',
+        },
+      },
+    },
+    required: false,
+  })
+  @IsOptional()
+  media?: Array<{
+    file: any;
+    label?: string;
+  }>;
 }
