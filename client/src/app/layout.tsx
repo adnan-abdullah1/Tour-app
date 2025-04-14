@@ -26,10 +26,10 @@ export default function RootLayout({
           
           {/* main should grow to fill the space between header and footer */}
           <main className="flex-1 ">{children}</main>
-          <div>
+          
           <Subscribe />
           <FooterView />
-          </div>
+         
          
         </div>
       </body>

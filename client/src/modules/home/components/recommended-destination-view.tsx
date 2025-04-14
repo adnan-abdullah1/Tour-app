@@ -15,9 +15,9 @@ export default function RecommendedDestinations() {
 
     });
     return (
-        <div className="h-screen flex pt-[120px] justify-center">
+        <div className="h-screen flex pt-[100px] justify-center">
             <div className="w-4/5">
-                <p className="text-[var(--tour-color-primary)] font-bold">Recommended Tours</p>
+                <p className="text-[var(--tour-color-primary)] font-bold">Recommended Packages</p>
                 <div className="flex justify-between items-center mb-6">
                     <TypographyExtraSmallMuted>
                         These popular destinations have a lot to offer

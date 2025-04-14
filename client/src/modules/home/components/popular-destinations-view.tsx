@@ -19,7 +19,7 @@ export default function PopularDestinations() {
   });
 
   return (
-    <div className="h-[70vh] flex pt-[120px] justify-center">
+    <div className="h-[450px] flex pt-[70px] justify-center">
       <div className="w-4/5">
         <p className="text-[var(--tour-color-primary)] font-bold">Popular Destinations</p>
         <div className="flex justify-between items-start mb-6">
