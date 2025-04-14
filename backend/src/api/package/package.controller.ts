@@ -10,11 +10,13 @@ import {
   ParseUUIDPipe,
   Post,
   Query,
+  Res,
   UploadedFiles,
   UseInterceptors,
 } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { ApiParam, ApiTags } from '@nestjs/swagger';
+import { Response } from 'express';
 import { CreatePackageDto } from './dto/create-package.dto';
 import { ListPackageReqDto } from './dto/list-package.req.dto';
 import { PackageResponseDto } from './dto/package-res-dto';
@@ -50,7 +52,7 @@ export class PackageController {
     summary: 'Create Package',
   })
   @UseInterceptors(
-    FilesInterceptor('files', 10, {
+    FilesInterceptor('media', 10, {
       fileFilter: fileFilter,
       limits: { fileSize: maxSize },
     }),
@@ -58,19 +60,21 @@ export class PackageController {
   @Post()
   async createPackage(
     @Body() dto: CreatePackageDto,
-    @UploadedFiles() files: Express.Multer.File[],
+    @UploadedFiles() media: Express.Multer.File[],
+    @Res() res: Response,
   ) {
     try {
       const data: PackageResponseDto =
         await this.packageService.createPackage(dto);
 
-      if (!files || files.length === 0) {
-        return data;
+      if (!media || media.length === 0) {
+        return res.json(data);
       }
 
+      res.json(data);
+
       // Upload media files for the package and save the media ids in db
-      await this.packageService.uploadPackageMedia(files, data.id);
-      return data;
+      await this.packageService.uploadPackageMedia(media, data.id);
     } catch (err) {
       console.error(err);
       throw new BadRequestException(err.message);

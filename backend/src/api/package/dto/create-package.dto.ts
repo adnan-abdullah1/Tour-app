@@ -98,7 +98,7 @@ export class CreatePackageDto {
   })
   @IsOptional()
   media?: Array<{
-    file: any;
+    media: any;
     label?: string;
   }>;
 }
