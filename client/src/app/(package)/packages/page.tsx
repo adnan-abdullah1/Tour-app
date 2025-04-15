@@ -1,7 +1,17 @@
+// app/packages/page.tsx
+
 import PackagesView from "@/modules/home/components/packages-view";
 
-export default function Packages(){
-    return <>
-        <PackagesView />
-    </>
+interface SearchParams {
+  location?: string;
+}
+
+interface Props {
+  searchParams: SearchParams;
+}
+
+export default function Packages({ searchParams }: Props) {
+  const location = searchParams.location ?? '';
+
+  return <PackagesView location={location} />;
 }

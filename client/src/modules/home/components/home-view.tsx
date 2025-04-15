@@ -1,5 +1,7 @@
 'use client';
 
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -7,6 +9,16 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Search } from 'lucide-react';
 
 export default function HomeView() {
+  const [location, setLocation] = useState('');
+  const router = useRouter();
+
+  const handleSearch = () => {
+    const trimmedLocation = location.trim();
+    if (trimmedLocation) {
+      router.push(`/packages?location=${encodeURIComponent(trimmedLocation)}`);
+    }
+  };
+
   return (
     <div className="relative w-full h-screen overflow-hidden">
       {/* Background Image */}
@@ -45,7 +57,15 @@ export default function HomeView() {
           {/* Location */}
           <div className="text-left">
             <p className="text-sm font-semibold">Location</p>
-            <Input placeholder="Where are you going?" className="mt-1 text-white placeholder-white/60 bg-transparent border-white/30 focus:ring-white" />
+            <Input
+              placeholder="Where are you going?"
+              className="mt-1 text-white placeholder-white/60 bg-transparent border-white/30 focus:ring-white"
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') handleSearch();
+              }}
+            />
           </div>
 
           {/* Dates */}
@@ -62,13 +82,16 @@ export default function HomeView() {
 
           {/* Search Button */}
           <div className="flex justify-center md:justify-end">
-            <Button variant="ghost" className="w-full md:w-auto text-white border border-white/30 hover:bg-white/10">
+            <Button
+              variant="ghost"
+              className="w-full md:w-auto text-white border border-white/30 hover:bg-white/10"
+              onClick={handleSearch}
+            >
               <Search className="w-4 h-4 mr-2" />
               Search
             </Button>
           </div>
         </div>
-
       </div>
     </div>
   );
