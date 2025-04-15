@@ -77,4 +77,20 @@ export class PackageEntity extends AbstractEntity {
 
   @Column({ type: 'json', nullable: true })
   highlights!: Array<{ icon: string; description: string }>;
+
+  @Column({
+    type: 'tsvector',
+    name: 'package_search',
+    nullable: true,
+    select: false,
+  })
+  PackageSearch!: string;
+
+  @Column({
+    type: 'tsvector',
+    name: 'location_search',
+    nullable: true,
+    select: false,
+  })
+  LocationSearch!: string;
 }

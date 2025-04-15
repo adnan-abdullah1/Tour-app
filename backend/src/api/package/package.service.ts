@@ -63,15 +63,35 @@ export class PackageService {
   async getAllPackages(
     reqDto: ListPackageReqDto,
   ): Promise<OffsetPaginatedDto<PackageResponseDto>> {
+    let location = '';
+
+    if (reqDto.q && reqDto.q.includes('location=')) {
+      const parts = reqDto.q.split('&');
+      for (const part of parts) {
+        const [key, value] = part.split('=');
+        if (key.trim() === 'location' && value) {
+          location = value.trim();
+        }
+      }
+    }
+
     const query = this.packageRepository
-      .createQueryBuilder('user')
-      .orderBy('user.createdAt', 'DESC');
-    const [users, metaDto] = await paginate<PackageEntity>(query, reqDto, {
+      .createQueryBuilder('package')
+      .orderBy('package.createdAt', 'DESC');
+
+    if (location) {
+      query.andWhere(`package.location_search @@ plainto_tsquery(:location)`, {
+        location,
+      });
+    }
+
+    const [packages, metaDto] = await paginate<PackageEntity>(query, reqDto, {
       skipCount: false,
       takeAll: false,
     });
+
     return new OffsetPaginatedDto(
-      plainToInstance(PackageResponseDto, users),
+      plainToInstance(PackageResponseDto, packages),
       metaDto,
     );
   }
