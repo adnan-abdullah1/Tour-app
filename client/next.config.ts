@@ -8,6 +8,10 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'gotrip-appdir.vercel.app',
       },
+      {
+        protocol: 'https',
+        hostname: 'storage.googleapis.com',
+      }
     ],
   },
 };

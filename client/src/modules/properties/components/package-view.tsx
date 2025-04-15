@@ -14,7 +14,7 @@ export default async function PackageView({
   const { packageId } = await params;
   return (
     <div >
-      <PackageDetails />
+      <PackageDetails   packageId={packageId} />
       <PackageHighlight />
       <PackagePlaceToSee />
       <PackageDayPlan />

@@ -1,19 +1,38 @@
 "use client"
+import { useEffect, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { TypographyExtraSmallMuted } from "@/components/ui/typography";
 import Image from "next/image";
+import Link from "next/link";
+
+interface Package {
+    id: string;
+    name: string;
+    location: string;
+    rating: number;
+    price: string;
+    media: { url: string }[];
+    reviewCount?: number; // optional fallback
+  }
 
 export default function RecommendedDestinations() {
-    const images = Array(5).fill({
-        url: "https://gotrip-appdir.vercel.app/_next/image?url=%2Fimg%2Fdestinations%2F1%2F1.png&w=384&q=75",
-        name: "Bali, Indonesia",
-        location: "Westminster Borough, London",
-        rating: 4.2,
-        reviewCount: 3112,
-        price: 32
+    const [packages, setPackages] = useState<Package[]>([]);
 
-    });
+    useEffect(() => {
+        async function fetchPackages() {
+            try {
+                const res = await fetch("http://localhost:5000/api/package");
+                const json = await res.json();
+                setPackages(json.data || []);
+            } catch (error) {
+                console.error("Error fetching packages:", error);
+            }
+        }
+
+        fetchPackages();
+    }, []);
+
     return (
         <div className="h-screen flex pt-[100px] justify-center">
             <div className="w-4/5">
@@ -22,52 +41,56 @@ export default function RecommendedDestinations() {
                     <TypographyExtraSmallMuted>
                         These popular destinations have a lot to offer
                     </TypographyExtraSmallMuted>
-
                 </div>
 
-                {/* Carousel */}
                 <Carousel opts={{ align: "start" }} className="w-full max-w-full">
                     <CarouselContent className="-ml-4">
-                        {images.map((img, index) => (
+                        {packages.map((pkg, index) => (
                             <CarouselItem
-                                key={index}
+                                key={pkg.id || index}
                                 className="pl-4 
                                            basis-full 
                                            sm:basis-1/2 
                                            md:basis-1/3 
                                            lg:basis-1/5"
-
                             >
+                                <Link href={`/packages/${pkg.id}`} className="block">
                                 <Card className="overflow-hidden rounded-xl shadow-md group border-none !bg-transparent !shadow-none">
                                     <div className="relative w-full h-[200px] overflow-hidden rounded-sm">
-                                        <Image
-                                            src={img.url}
-                                            alt={`Destination ${index + 1}`}
-                                            fill
-                                            className="object-cover transition-transform duration-300 ease-in-out group-hover:scale-110"
-                                        />
+                                        {pkg.media?.[0]?.url ? (
+                                            <Image
+                                                src={pkg.media[0].url}
+                                                alt={`Destination ${index + 1}`}
+                                                fill
+                                                className="object-cover transition-transform duration-300 ease-in-out group-hover:scale-110"
+                                            />
+                                        ) : (
+                                            <div className="w-full h-full bg-gray-200 flex items-center justify-center text-sm text-gray-600">
+                                                No image
+                                            </div>
+                                        )}
                                     </div>
                                     <div className="p-2 space-y-1">
-                                        <h3 className="text-lg font-semibold">{img.name}</h3>
-                                        <p className="text-sm text-gray-500">{img.location}</p>
+                                        <h3 className="text-lg font-semibold">{pkg.name}</h3>
+                                        <p className="text-sm text-gray-500">{pkg.location}</p>
                                         <div className="flex items-center justify-between mt-2">
                                             <span className="text-white text-xs px-2 py-1 rounded" style={{ backgroundColor: '#3554d1' }}>
-                                                ⭐ {img.rating}
+                                                ⭐ {pkg.rating || 0}
                                             </span>
-                                            <span className="text-xs text-gray-500">{img.reviewCount} reviews</span>
+                                            <span className="text-xs text-gray-500">{"0 reviews"}</span>
                                         </div>
                                         <p className="text-sm font-medium text-gray-700 mt-1">
-                                            Starting from ${img.price}
+                                            Starting from ${pkg.price}
                                         </p>
                                     </div>
                                 </Card>
+                               </Link>
                             </CarouselItem>
                         ))}
                     </CarouselContent>
                     <CarouselPrevious />
                     <CarouselNext />
                 </Carousel>
-
             </div>
         </div>
     );
