@@ -2,8 +2,8 @@
 process.env.NODE_ENV = 'test';
 process.env.MODULES_SET = 'monolith';
 process.env.APP_NAME = 'NestJS API';
-process.env.APP_URL = 'http://localhost:3000';
-process.env.APP_PORT = '3000';
+process.env.APP_URL = 'http://localhost:5000';
+process.env.APP_PORT = '5000';
 process.env.APP_DEBUG = 'false';
 process.env.API_PREFIX = 'api';
 process.env.APP_FALLBACK_LANGUAGE = 'en';

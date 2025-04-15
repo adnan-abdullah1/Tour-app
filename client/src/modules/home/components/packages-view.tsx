@@ -30,7 +30,7 @@ export default function PackagesView({ location }: PackagesViewProps) {
     useEffect(() => {
         const fetchPackages = async () => {
             try {
-                const response = await axios.get(`http://localhost:5000/api/packages?location=${location}`);
+                const response = await axios.get(`http://localhost:5000/api/packages?q=location=${location}`);
                 setPackages(response.data.data);
             } catch (err) {
                 console.error('Error fetching packages:', err);
