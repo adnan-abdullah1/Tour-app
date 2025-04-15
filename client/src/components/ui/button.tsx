@@ -20,7 +20,7 @@ const buttonVariants = cva(
         ghost:
           "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
         link: "text-primary underline-offset-4 hover:underline",
-        tour_button_light_outline: "text-white border border-white  hover:bg-white hover:text-gray-900 cursor-pointer transition ease-out duration-500 font-light",
+        tour_button_light_outline: "text-white border border-white  hover:text-[var(--tour-color-primary)]  hover:bg-white  cursor-pointer transition ease-out duration-500 font-light",
         tour_button_primary: "text-white bg-[#051036]    cursor-pointer"
       },
       size: {
