@@ -30,7 +30,7 @@ export default function PackagesView({ location }: PackagesViewProps) {
     useEffect(() => {
         const fetchPackages = async () => {
             try {
-                const response = await axios.get(`http://localhost:5000/api/packages?location=${location}`);
+                const response = await axios.get(`http://localhost:5000/api/package?q=location=${location}`);
                 setPackages(response.data.data);
             } catch (err) {
                 console.error('Error fetching packages:', err);
@@ -62,7 +62,7 @@ export default function PackagesView({ location }: PackagesViewProps) {
                             {/* Image */}
                             <div className="relative w-full md:w-64 h-60 md:h-auto flex-shrink-0">
                                 <Image
-                                    src={pkg.media[0]?.url || '/fallback.png'}
+                                    src={pkg.media?.[0]?.url || '/fallback.png'}
                                     alt={pkg.name}
                                     layout="fill"
                                     objectFit="cover"
@@ -80,9 +80,9 @@ export default function PackagesView({ location }: PackagesViewProps) {
                                         <p className="text-sm text-gray-500">{pkg.description}</p>
 
                                         <div className="flex flex-wrap gap-2 mt-2">
-                                            {pkg.inclusions
-                                                .split('\n')
-                                                .filter(Boolean)
+                                            {pkg?.inclusions
+                                                ?.split('\n')
+                                                ?.filter(Boolean)
                                                 .map((item, i) => (
                                                     <Badge key={i} variant="outline">
                                                         {item}
