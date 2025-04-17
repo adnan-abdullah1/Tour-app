@@ -1,12 +1,12 @@
 
-import { Uuid } from '@/common/types/common.type';
 import { StringField } from '@/decorators/field.decorators';
 import { ApiProperty } from '@nestjs/swagger';
+import { ObjectId } from 'mongoose';
 
 
 export class PackageResponseDto {
   @StringField()
-  id!: Uuid;
+  id!: ObjectId;
 
   @StringField()
   name!: string;

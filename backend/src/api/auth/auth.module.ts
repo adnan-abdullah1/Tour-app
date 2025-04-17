@@ -2,9 +2,7 @@ import { QueueName, QueuePrefix } from '@/constants/job.constant';
 import { BullModule } from '@nestjs/bullmq';
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { FirebaseModule } from 'src/firebase/firebase/firebase.module';
-import { UserEntity } from '../user/entities/user.entity';
 import { UserModule } from '../user/user.module';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
@@ -13,7 +11,6 @@ import { AuthService } from './auth.service';
   imports: [
     FirebaseModule,
     UserModule,
-    TypeOrmModule.forFeature([UserEntity]),
     JwtModule.register({}),
     BullModule.registerQueue({
       name: QueueName.EMAIL,

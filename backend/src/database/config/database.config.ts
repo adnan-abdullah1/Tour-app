@@ -31,17 +31,17 @@ class EnvironmentVariablesValidator {
   @Max(65535)
   DATABASE_PORT: number;
 
-  @ValidateIf((envValues) => !envValues.DATABASE_URL)
-  @IsString()
-  DATABASE_PASSWORD: string;
+  // @ValidateIf((envValues) => !envValues.DATABASE_URL)
+  // @IsString()
+  // DATABASE_PASSWORD: string;
 
   @ValidateIf((envValues) => !envValues.DATABASE_URL)
   @IsString()
   DATABASE_NAME: string;
 
-  @ValidateIf((envValues) => !envValues.DATABASE_URL)
-  @IsString()
-  DATABASE_USERNAME: string;
+  // @ValidateIf((envValues) => !envValues.DATABASE_URL)
+  // @IsString()
+  // DATABASE_USERNAME: string;
 
   @IsBoolean()
   @IsOptional()
@@ -75,6 +75,10 @@ class EnvironmentVariablesValidator {
   @IsString()
   @IsOptional()
   DATABASE_CERT: string;
+
+  @IsString()
+  @IsOptional()
+  DATABASE_MONGO_URI: string;
 }
 
 export default registerAs<DatabaseConfig>('database', () => {
@@ -87,9 +91,9 @@ export default registerAs<DatabaseConfig>('database', () => {
     port: process.env.DATABASE_PORT
       ? parseInt(process.env.DATABASE_PORT, 10)
       : 5432,
-    password: process.env.DATABASE_PASSWORD,
     name: process.env.DATABASE_NAME,
     username: process.env.DATABASE_USERNAME,
+    password: process.env.DATABASE_USERNAME,
     logging: process.env.DATABASE_LOGGING === 'true',
     synchronize: process.env.DATABASE_SYNCHRONIZE === 'true',
     maxConnections: process.env.DATABASE_MAX_CONNECTIONS
@@ -100,5 +104,6 @@ export default registerAs<DatabaseConfig>('database', () => {
     ca: process.env.DATABASE_CA,
     key: process.env.DATABASE_KEY,
     cert: process.env.DATABASE_CERT,
+    mongoUri: process.env.DATABASE_MONGO_URI,
   };
 });

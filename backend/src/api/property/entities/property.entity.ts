@@ -1,27 +1,26 @@
-import { Uuid } from '@/common/types/common.type';
 import { AbstractEntity } from '@/database/entities/abstract.entity';
+import { ObjectId } from 'mongodb';
 import {
   Column,
   DeleteDateColumn,
   Entity,
   Index,
-  PrimaryGeneratedColumn,
+  ObjectIdColumn,
 } from 'typeorm';
 
 @Entity('property')
+@Index('UQ_property', ['name'], { unique: true, where: '"deletedAt" IS NULL' })
 export class PropertyEntity extends AbstractEntity {
   constructor(data?: Partial<PropertyEntity>) {
     super();
     Object.assign(this, data);
   }
 
-  @PrimaryGeneratedColumn('uuid', {
-    primaryKeyConstraintName: 'PK_property_id',
-  })
-  id!: Uuid;
+  @ObjectIdColumn()
+  id!: ObjectId;
 
   @Column()
-  @Index('UQ_property', { where: '"deleted_at" IS NULL', unique: true })
+  @Index()
   name!: string;
 
   @Column({ type: 'text', nullable: true })
@@ -36,7 +35,7 @@ export class PropertyEntity extends AbstractEntity {
     length: 50,
     default: '1-star',
   })
-  propertyClass: string; // e.g., "4-star", "5-star"
+  propertyClass: string;
 
   @Column({ type: 'json', nullable: true })
   media?: Array<{ type: 'video' | 'image'; url: string }>;

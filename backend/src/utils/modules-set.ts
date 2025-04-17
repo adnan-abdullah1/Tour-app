@@ -5,7 +5,7 @@ import appConfig from '@/config/app.config';
 import { AllConfigType } from '@/config/config.type';
 import { Environment } from '@/constants/app.constant';
 import databaseConfig from '@/database/config/database.config';
-import { TypeOrmConfigService } from '@/database/typeorm-config.service';
+// import { TypeOrmConfigService } from '@/database/typeorm-config.service';
 import mailConfig from '@/mail/config/mail.config';
 import { MailModule } from '@/mail/mail.module';
 import redisConfig from '@/redis/config/redis.config';
@@ -13,7 +13,8 @@ import { BullModule } from '@nestjs/bullmq';
 import { CacheModule } from '@nestjs/cache-manager';
 import { ModuleMetadata } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { MongooseModule } from '@nestjs/mongoose';
+// import { TypeOrmModule } from '@nestjs/typeorm';
 import { redisStore } from 'cache-manager-ioredis-yet';
 import {
   AcceptLanguageResolver,
@@ -25,7 +26,6 @@ import { LoggerModule } from 'nestjs-pino';
 import path from 'path';
 import firebaseConfig from 'src/firebase/config/firebase.config';
 import { FirebaseModule } from 'src/firebase/firebase/firebase.module';
-import { DataSource, DataSourceOptions } from 'typeorm';
 import loggerFactory from './logger-factory';
 
 function generateModulesSet() {
@@ -44,17 +44,6 @@ function generateModulesSet() {
     }),
   ];
   let customModules: ModuleMetadata['imports'] = [];
-
-  const dbModule = TypeOrmModule.forRootAsync({
-    useClass: TypeOrmConfigService,
-    dataSourceFactory: async (options: DataSourceOptions) => {
-      if (!options) {
-        throw new Error('Invalid options passed');
-      }
-
-      return new DataSource(options).initialize();
-    },
-  });
 
   const bullModule = BullModule.forRootAsync({
     imports: [ConfigModule],
@@ -133,6 +122,19 @@ function generateModulesSet() {
     inject: [ConfigService],
   });
 
+  const mongooseModule = MongooseModule.forRootAsync({
+    imports: [ConfigModule],
+    useFactory: (configService: ConfigService<AllConfigType>) => {
+      const mongoUri = configService.getOrThrow('database.mongoUri', {
+        infer: true,
+      });
+      console.log('MongoDB URI:', mongoUri);
+      return {
+        uri: mongoUri,
+      };
+    },
+    inject: [ConfigService],
+  });
   const modulesSet = process.env.MODULES_SET || 'monolith';
 
   switch (modulesSet) {
@@ -142,11 +144,11 @@ function generateModulesSet() {
         bullModule,
         BackgroundModule,
         cacheModule,
-        dbModule,
         i18nModule,
         loggerModule,
         MailModule,
         FirebaseModule,
+        mongooseModule,
       ];
       break;
     case 'api':
@@ -154,10 +156,10 @@ function generateModulesSet() {
         ApiModule,
         bullModule,
         cacheModule,
-        dbModule,
         i18nModule,
         loggerModule,
         MailModule,
+        mongooseModule,
       ];
       break;
     case 'background':
@@ -165,9 +167,9 @@ function generateModulesSet() {
         bullModule,
         BackgroundModule,
         cacheModule,
-        dbModule,
         i18nModule,
         loggerModule,
+        mongooseModule,
       ];
       break;
     default:

@@ -33,6 +33,23 @@ services:
     networks:
       - tour-app-nw
 
+  tour_mongo:
+    image: mongo:6
+    container_name: tour-mongo
+    restart: always
+    volumes:
+      - mongo_data:/data/db
+    environment:
+      MONGO_INITDB_DATABASE: tour_app
+      # MONGO_INITDB_ROOT_USERNAME: mongo
+      # MONGO_INITDB_ROOT_PASSWORD: mongo
+      TZ: "UTC"
+    ports:
+      - "27018:27017"
+    networks:
+      - tour-app-nw
+
+
   tour_redis:
     image: redis/redis-stack:latest
     restart: always
@@ -77,6 +94,7 @@ volumes:
   postgres_data:
   pgadmin_data:
   redis_data:
+  mongo_data:
 
 networks:
   tour-app-nw:

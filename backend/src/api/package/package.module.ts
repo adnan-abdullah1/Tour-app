@@ -1,16 +1,15 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { MongooseModule } from '@nestjs/mongoose';
 import { FirebaseModule } from 'src/firebase/firebase/firebase.module';
-import { DepartureEntity } from './entities/departure.entity';
-import { PackageEntity } from './entities/package.entity';
+import { PackageSchema } from './entities/package.entity';
 import { MediaController } from './media/media.controller';
 import { PackageController } from './package.controller';
 import { PackageService } from './package.service';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([PackageEntity, DepartureEntity]),
     FirebaseModule,
+    MongooseModule.forFeature([{ name: 'Package', schema: PackageSchema }]),
   ],
   controllers: [PackageController, MediaController],
   providers: [PackageService],

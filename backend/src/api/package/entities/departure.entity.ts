@@ -4,11 +4,8 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinColumn,
-  ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { PackageEntity } from './package.entity';
 
 @Entity('package_departure')
 export class DepartureEntity extends AbstractEntity {
@@ -38,10 +35,4 @@ export class DepartureEntity extends AbstractEntity {
 
   @Column({ type: 'numeric' })
   price!: number;
-
-  @ManyToOne('PackageEntity', 'departure', {
-    onDelete: 'CASCADE',
-  })
-  @JoinColumn({ name: 'package_id' })
-  package!: PackageEntity;
 }

@@ -1,12 +1,5 @@
 import { AbstractEntity } from '@/database/entities/abstract.entity';
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
-import { PackageEntity } from './package.entity'; // Import the PackageEntity
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('package_media')
 export class MediaEntity extends AbstractEntity {
@@ -28,10 +21,4 @@ export class MediaEntity extends AbstractEntity {
 
   @Column({ type: 'text', nullable: true })
   description?: string;
-
-  @ManyToOne(() => PackageEntity, (Package) => Package.media, {
-    onDelete: 'CASCADE',
-  })
-  @JoinColumn({ name: 'package_id' }) // Fk
-  package!: PackageEntity; // Reference to the PackageEntity
 }

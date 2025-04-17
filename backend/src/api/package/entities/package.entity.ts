@@ -1,80 +1,63 @@
-import { Uuid } from '@/common/types/common.type';
-import { AbstractEntity } from '@/database/entities/abstract.entity';
-import {
-  Column,
-  CreateDateColumn,
-  DeleteDateColumn,
-  Entity,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Document, Schema } from 'mongoose';
 
-@Entity('package')
-export class PackageEntity extends AbstractEntity {
-  constructor(data?: Partial<PackageEntity>) {
-    super();
-    Object.assign(this, data);
-  }
+export const PackageSchema = new Schema(
+  {
+    name: { type: String, required: true },
+    location: { type: String, default: '', maxlength: 255, nullable: true },
+    description: { type: String, nullable: true },
+    redirectUrl: { type: String, default: '', nullable: true },
+    rating: { type: Number, default: 0, nullable: true },
+    price: { type: Schema.Types.Decimal128, default: 0 },
+    inclusions: { type: String, nullable: true },
+    exclusions: { type: String, nullable: true },
+    createdAt: { type: Date, default: Date.now },
+    deletedAt: { type: Date, default: null },
+    daysPlan: [
+      {
+        day: { type: Number, required: true },
+        plan: { type: String, required: true },
+        description: { type: String, required: true },
+      },
+    ],
+    media: [
+      {
+        url: { type: String, required: true },
+        path: { type: String, required: true },
+      },
+    ],
+    status: {
+      type: String,
+      enum: ['active', 'inactive', 'archived'],
+      default: 'inactive',
+    },
+    startDate: { type: Date, nullable: true },
+    endDate: { type: Date, nullable: true },
+    highlights: [
+      {
+        icon: { type: String, required: true },
+        description: { type: String, required: true },
+      },
+    ],
+  },
+  { timestamps: { createdAt: 'createdAt', updatedAt: 'updatedAt' } },
+);
 
-  @PrimaryGeneratedColumn('uuid', { primaryKeyConstraintName: 'PK_package_id' })
-  id!: Uuid;
-
-  @Column()
-  name!: string;
-
-  @Column({ type: 'varchar', length: 255, default: '', nullable: true })
-  location!: string;
-
-  @Column({ type: 'text', nullable: true })
-  description!: string;
-
-  @Column({ type: 'text', nullable: true, default: '' })
-  redirectUrl!: string;
-
-  @Column({ type: 'int', default: 0, nullable: true })
-  rating!: number;
-
-  @Column({ type: 'numeric', precision: 10, scale: 2, default: 0 })
-  price!: number;
-
-  @Column({ type: 'text', nullable: true })
-  inclusions!: string;
-
-  @Column({ type: 'text', nullable: true })
-  exclusions!: string;
-
-  @CreateDateColumn({ type: 'timestamp', name: 'created_at' })
-  declare createdAt: Date;
-
-  @DeleteDateColumn({ type: 'timestamp', name: 'deleted_at', default: null })
-  deletedAt!: Date;
-
-  @Column({ type: 'json', nullable: true })
-  daysPlan: Array<{ day: number; plan: string; description: string }>; // eg., { day: 1, plan: 'Day 1 Plan' },...]
-
-  @Column({ type: 'json', nullable: true })
-  media?: Array<{ url: string; path: string }>;
-
-  @Column({
-    type: 'enum',
-    enum: ['active', 'inactive', 'archived'],
-    default: 'inactive',
-  })
-  status!: 'active' | 'inactive' | 'archived';
-
-  @Column({
-    name: 'start_date',
-    type: 'date',
-    nullable: true,
-  })
-  startDate!: Date;
-
-  @Column({
-    name: 'end_date',
-    type: 'date',
-    nullable: true,
-  })
-  endDate!: Date;
-
-  @Column({ type: 'json', nullable: true })
-  highlights!: Array<{ icon: string; description: string }>;
+export interface Package extends Document {
+  _id: string;
+  name: string;
+  location: string;
+  description: string;
+  redirectUrl: string;
+  rating: number;
+  price: number;
+  inclusions: string;
+  exclusions: string;
+  createdAt: Date;
+  deletedAt: Date;
+  daysPlan: Array<{ day: number; plan: string; description: string }>;
+  media: Array<{ url: string; path: string }>;
+  status: 'active' | 'inactive' | 'archived';
+  startDate: Date;
+  endDate: Date;
+  highlights: Array<{ icon: string; description: string }>;
 }

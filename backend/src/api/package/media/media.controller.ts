@@ -57,7 +57,7 @@ export class MediaController {
       throw new BadRequestException('No files uploaded');
     }
 
-    this.packageService.uploadPackageMedia(files, id);
+    // this.packageService.uploadPackageMedia(files, id);
     return 'Files uploaded successfully';
   }
 }

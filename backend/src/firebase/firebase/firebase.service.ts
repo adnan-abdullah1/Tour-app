@@ -2,6 +2,7 @@ import { MediaType } from '@/api/package/types/package.types';
 import { Bucket } from '@google-cloud/storage';
 import { Inject, Injectable } from '@nestjs/common';
 import { app } from 'firebase-admin';
+import { ObjectId } from 'mongoose';
 import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
@@ -11,7 +12,7 @@ export class FirebaseService {
 
   async uploadPackageMedia(
     files: Express.Multer.File[],
-    packageId: string,
+    packageId: ObjectId,
   ): Promise<Array<MediaType>> {
     this.bucket = this.firebaseApp.storage().bucket();
 

@@ -92,7 +92,7 @@ export class PackageController {
   })
   @Delete(':id')
   async deletePackage(@Param('id', ParseUUIDPipe) id: Uuid) {
-    return await this.packageService.deletePackage(id);
+    // return await this.packageService.deletePackage(id);
   }
 
   @ApiPublic({
@@ -100,7 +100,7 @@ export class PackageController {
   })
   @Get('')
   async getAllPackages(@Query() reqDto: ListPackageReqDto) {
-    return await this.packageService.getAllPackages(reqDto);
+    // return await this.packageService.getAllPackages(reqDto);
   }
 
   @ApiPublic({
@@ -114,6 +114,6 @@ export class PackageController {
   })
   @Get(':id')
   async getPackageById(@Param('id', ParseUUIDPipe) id: Uuid) {
-    return await this.packageService.getPackageById(id);
+    // return await this.packageService.getPackageById(id);
   }
 }
