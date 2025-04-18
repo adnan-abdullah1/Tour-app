@@ -2,16 +2,12 @@
 
 import PackagesView from "@/modules/home/components/packages-view";
 
-interface SearchParams {
-  location?: string;
-}
 
-interface Props {
-  searchParams: SearchParams;
-}
 
-export default function Packages({ searchParams }: Props) {
-  const location = searchParams.location ?? '';
+export default async function Packages({ searchParams }: { searchParams: Promise<{ location: string }> }) {
 
-  return <PackagesView location={location} />;
+  const { location } = await searchParams;
+
+
+  return <PackagesView location={location || ''} />;
 }
