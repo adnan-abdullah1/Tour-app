@@ -1,7 +1,6 @@
 import { ErrorDetailDto } from '@/common/dto/error-detail.dto';
 import { ErrorDto } from '@/common/dto/error.dto';
 import { AllConfigType } from '@/config/config.type';
-import { constraintErrors } from '@/constants/constraint-errors';
 import { ErrorCode } from '@/constants/error-code.constant';
 import { ValidationException } from '@/exceptions/validation.exception';
 import { I18nTranslations } from '@/generated/i18n.generated';
@@ -18,7 +17,6 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { STATUS_CODES } from 'http';
 import { I18nContext } from 'nestjs-i18n';
-import { EntityNotFoundError, QueryFailedError } from 'typeorm';
 
 @Catch()
 export class GlobalExceptionFilter implements ExceptionFilter {
@@ -43,11 +41,13 @@ export class GlobalExceptionFilter implements ExceptionFilter {
       error = this.handleValidationException(exception);
     } else if (exception instanceof HttpException) {
       error = this.handleHttpException(exception);
-    } else if (exception instanceof QueryFailedError) {
-      error = this.handleQueryFailedError(exception);
-    } else if (exception instanceof EntityNotFoundError) {
-      error = this.handleEntityNotFoundError(exception);
-    } else {
+    }
+    // else if (exception instanceof QueryFailedError) {
+    //   error = this.handleQueryFailedError(exception);
+    // } else if (exception instanceof EntityNotFoundError) {
+    //   error = this.handleEntityNotFoundError(exception);
+    // }
+    else {
       error = this.handleError(exception);
     }
 
@@ -139,52 +139,52 @@ export class GlobalExceptionFilter implements ExceptionFilter {
    * @param error QueryFailedError
    * @returns ErrorDto
    */
-  private handleQueryFailedError(error: QueryFailedError): ErrorDto {
-    const r = error as QueryFailedError & { constraint?: string };
-    const { status, message } = r.constraint?.startsWith('UQ')
-      ? {
-          status: HttpStatus.CONFLICT,
-          message: r.constraint
-            ? this.i18n.t(
-                (constraintErrors[r.constraint] ||
-                  r.constraint) as keyof I18nTranslations,
-              )
-            : undefined,
-        }
-      : {
-          status: HttpStatus.INTERNAL_SERVER_ERROR,
-          message: this.i18n.t('common.error.internal_server_error'),
-        };
-    const errorRes = {
-      timestamp: new Date().toISOString(),
-      statusCode: status,
-      error: STATUS_CODES[status],
-      message,
-    } as unknown as ErrorDto;
+  // private handleQueryFailedError(error: QueryFailedError): ErrorDto {
+  //   const r = error as QueryFailedError & { constraint?: string };
+  //   const { status, message } = r.constraint?.startsWith('UQ')
+  //     ? {
+  //         status: HttpStatus.CONFLICT,
+  //         message: r.constraint
+  //           ? this.i18n.t(
+  //               (constraintErrors[r.constraint] ||
+  //                 r.constraint) as keyof I18nTranslations,
+  //             )
+  //           : undefined,
+  //       }
+  //     : {
+  //         status: HttpStatus.INTERNAL_SERVER_ERROR,
+  //         message: this.i18n.t('common.error.internal_server_error'),
+  //       };
+  //   const errorRes = {
+  //     timestamp: new Date().toISOString(),
+  //     statusCode: status,
+  //     error: STATUS_CODES[status],
+  //     message,
+  //   } as unknown as ErrorDto;
 
-    this.logger.error(error);
+  //   this.logger.error(error);
 
-    return errorRes;
-  }
+  //   return errorRes;
+  // }
 
   /**
    * Handles EntityNotFoundError when using findOrFail() or findOneOrFail() from TypeORM
    * @param error EntityNotFoundError
    * @returns ErrorDto
    */
-  private handleEntityNotFoundError(error: EntityNotFoundError): ErrorDto {
-    const status = HttpStatus.NOT_FOUND;
-    const errorRes = {
-      timestamp: new Date().toISOString(),
-      statusCode: status,
-      error: STATUS_CODES[status],
-      message: this.i18n.t('common.error.entity_not_found'),
-    } as unknown as ErrorDto;
+  // private handleEntityNotFoundError(error: EntityNotFoundError): ErrorDto {
+  //   const status = HttpStatus.NOT_FOUND;
+  //   const errorRes = {
+  //     timestamp: new Date().toISOString(),
+  //     statusCode: status,
+  //     error: STATUS_CODES[status],
+  //     message: this.i18n.t('common.error.entity_not_found'),
+  //   } as unknown as ErrorDto;
 
-    this.logger.debug(error);
+  //   this.logger.debug(error);
 
-    return errorRes;
-  }
+  //   return errorRes;
+  // }
 
   /**
    * Handles generic errors

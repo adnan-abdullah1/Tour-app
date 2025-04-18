@@ -2,7 +2,7 @@ import { SYSTEM_USER_ID } from '@/constants/app.constant';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { plainToInstance } from 'class-transformer';
-import { Model, ObjectId, Types } from 'mongoose';
+import { Model, ObjectId } from 'mongoose';
 import { FirebaseService } from 'src/firebase/firebase/firebase.service';
 import { CreatePackageDto } from './dto/create-package.dto';
 import { PackageResponseDto } from './dto/package-res-dto';
@@ -84,7 +84,7 @@ export class PackageService {
   async uploadPackageMedia(files: Express.Multer.File[], packageId: ObjectId) {
     try {
       const packageMedia: Array<MediaType> =
-      await this.firebaseService.uploadPackageMedia(files, packageId);
+        await this.firebaseService.uploadPackageMedia(files, packageId);
       await this.saveMediaUrls(packageMedia, packageId);
     } catch (err) {
       //we need to add log to keep track fo what happened while uploading to firebase
@@ -96,7 +96,7 @@ export class PackageService {
   // save media urls
   async saveMediaUrls(packageMedia: Array<MediaType>, _id: ObjectId) {
     try {
-      const Package:any = await this.packageModel.findOne({ _id: new Types.ObjectId(_id) });
+      const Package: any = await this.packageModel.findById(_id);
 
       if (!Package) {
         throw new NotFoundException(

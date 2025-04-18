@@ -1,16 +1,4 @@
-import { OffsetPaginatedDto } from '@/common/dto/offset-pagination/paginated.dto';
-import { Uuid } from '@/common/types/common.type';
-import { SYSTEM_USER_ID } from '@/constants/app.constant';
-import { paginate } from '@/utils/offset-pagination';
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { plainToInstance } from 'class-transformer';
-import { Repository } from 'typeorm';
-import { CreatePropertyDto } from './dto/create-property.dto';
-import { ListPropertyReqDto } from './dto/list-property.req.dto';
-import { PropertyResponseDto } from './dto/property-res.dto';
-import { UpdatePropertyDto } from './dto/update-property.dto';
-import { PropertyEntity } from './entities/property.entity';
+import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class PropertyService {
@@ -18,7 +6,6 @@ export class PropertyService {
   //   @InjectRepository(PropertyEntity)
   //   private readonly propertyRepository: Repository<PropertyEntity>,
   // ) {}
-
   // async create(createPropertyDto: CreatePropertyDto) {
   //   const newProperty = new PropertyEntity({
   //     name: createPropertyDto.name,
@@ -28,13 +15,11 @@ export class PropertyService {
   //     createdBy: SYSTEM_USER_ID,
   //     updatedBy: SYSTEM_USER_ID,
   //   });
-
   //   await newProperty.save();
   //   return plainToInstance(CreatePropertyDto, {
   //     propertyId: newProperty.id,
   //   });
   // }
-
   // async findAll(
   //   reqDto: ListPropertyReqDto,
   // ): Promise<OffsetPaginatedDto<PropertyResponseDto>> {
@@ -54,22 +39,18 @@ export class PropertyService {
   //     metaDto,
   //   );
   // }
-
   // findOne(id: number) {
   //   return `This action returns a #${id} property`;
   // }
-
   // update(id: number, updatePropertyDto: UpdatePropertyDto) {
   //   return `This action updates a #${id} property`;
   // }
-
   // async remove(id: Uuid) {
   //   // check if id exists
   //   const property = await this.propertyRepository.exists({ where: { id } });
   //   if (!property) {
   //     throw new NotFoundException(`Property with id ${id} not found`);
   //   }
-
   //   // Perform soft delete
   //   return await this.propertyRepository.softDelete(id);
   // }
