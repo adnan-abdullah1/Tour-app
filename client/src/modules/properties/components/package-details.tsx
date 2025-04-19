@@ -9,21 +9,23 @@ interface PackageDetailsProps {
 export default async function PackageDetails({ packageId }: PackageDetailsProps) {
   let data: any = null;
 
-  try {
-    const res = await fetch(`http://localhost:5000/api/package/${packageId}`, {
-      cache: 'no-store',
-    });
-    data = await res.json();
-  } catch (error) {
-    console.error('Failed to fetch package details:', error);
-  }
+  // try {
+  //   const res = await fetch(`http://localhost:5000/api/package/${packageId}`, {
+  //     cache: 'no-store',
+  //   });
+  //   data = await res.json();
+  // } catch (error) {
+  //   console.error('Failed to fetch package details:', error);
+  // }
+
+
 
   const images = data?.media?.length ? data.media : [
-    { url: "https://gotrip-appdir.vercel.app/img/hotels/1.png" },
-    { url: "https://gotrip-appdir.vercel.app/img/gallery/1/2.png" },
-    { url: "https://gotrip-appdir.vercel.app/img/gallery/1/4.png" },
-    { url: "https://gotrip-appdir.vercel.app/img/gallery/1/5.png" },
-    { url: "https://gotrip-appdir.vercel.app/img/hotels/2.png" },
+
+
+    { url: "https://image.kesari.in/upload/HE/Funcampus-Kufri.jpg" },
+    { url: "https://image.kesari.in/upload/HE/WAGAHBORDER1.jpg" },
+    { url: "https://image.kesari.in/upload/HE/Gyuto_Monastery_Main1.jpg" },
   ];
 
   return (
@@ -54,7 +56,7 @@ export default async function PackageDetails({ packageId }: PackageDetailsProps)
         </div>
 
         {/* Other Images */}
-        {images.slice(1).map((img:{url:string,path:string}, index:number) => (
+        {images.slice(1).map((img: { url: string, path: string }, index: number) => (
           <div
             key={index}
             className="relative col-span-12 sm:col-span-6 lg:col-span-3 sm:row-span-6 min-h-[200px] rounded bg-teal-600 shadow-xl overflow-hidden"

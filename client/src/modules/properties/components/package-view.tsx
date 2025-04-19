@@ -5,6 +5,7 @@ import PackageProperties from "@/modules/packages/compenents/properties";
 import PackageFaqs from "@/modules/packages/compenents/faq-view";
 import PackagePolicies from "@/modules/packages/compenents/policy-view";
 import PackagePlaceToSee from "@/modules/packages/compenents/places-to-see-view";
+import InclusionExclusionTab from "@/modules/packages/compenents/inclusion-excusion-tab-view";
 
 export default async function PackageView({
   params,
@@ -17,6 +18,7 @@ export default async function PackageView({
       <PackageDetails   packageId={packageId} />
       <PackageHighlight />
       <PackagePlaceToSee />
+      <InclusionExclusionTab />
       <PackageDayPlan />
       <PackageProperties />
       <PackagePolicies />
