@@ -1,7 +1,5 @@
 const { chromium } = require('playwright');
 
-
-
 (async () => {
   const browser = await chromium.launch({ headless: true });
   const page = await browser.newPage();
@@ -12,19 +10,14 @@ const { chromium } = require('playwright');
   // Wait for the main content to load
   await page.waitForSelector('.tdp-info__title', { timeout: 10000 });
 
-  // Function to extract text content from a list
-  const getListItems = (selector) => {
-    const elements = document.querySelectorAll(selector);
-    return Array.from(elements).map(el => el.textContent.trim());
-  };
-
   const data = await page.evaluate(() => {
+    // Function to extract text content from an element
     const getText = (selector) => {
       const el = document.querySelector(selector);
       return el ? el.textContent.trim() : 'Not Found';
     };
 
-    // Function to extract list items
+    // Function to extract list items from a list
     const getListItems = (selector) => {
       const elements = document.querySelectorAll(selector);
       return Array.from(elements).map(el => el.textContent.trim());
@@ -40,7 +33,7 @@ const { chromium } = require('playwright');
       endDate: getText('.tdp-dates-availability__dl__ed__date'),
       startDay: getText('.tdp-dates-availability__dl__sd__day'),
       endDay: getText('.tdp-dates-availability__dl__ed__date'),
-      price: getText('.tdp-info__price-box__price'),
+      price: getText('.tdp-info__price'), // Updated selector
       callNumber: getText('.tdp-info__call-number a'),
       email: getText('.tdp-info__call__mail a'),
       inclusions
@@ -74,18 +67,16 @@ const { chromium } = require('playwright');
   const tourItinerary = await getTabContent('.adventure-scroll__menu__list__items__menu-link:has-text("Tour Itinerary")');
   const policy = await getTabContent('.adventure-scroll__menu__list__items__menu-link:has-text("Policy")');
 
-
   const imageUrls = await page.evaluate(() => {
-    // check if urls are valid
+    // check if URLs are valid
     const isValidURL = (url) => {
       try {
-        new URL(url)
+        new URL(url);
         return url;
-      }
-      catch (err) {
+      } catch (err) {
         return false;
       }
-    }
+    };
     // Get all image URLs inside the div with the class tdp-hero-carousel__img-box
     const images = document.querySelectorAll('.tdp-hero-carousel__img-box img');
     return Array.from(images).filter(img => isValidURL(img.src)).map(img => img.src);
@@ -95,13 +86,9 @@ const { chromium } = require('playwright');
   data.highlights = highlights;
   data.tourItinerary = tourItinerary;
   data.policy = policy;
-  data.imageUrls = imageUrls
+  data.imageUrls = imageUrls;
 
   console.log(data);
 
   await browser.close();
 })();
-
-
-
-

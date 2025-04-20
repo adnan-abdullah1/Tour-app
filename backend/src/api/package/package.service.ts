@@ -2,11 +2,11 @@ import { SYSTEM_USER_ID } from '@/constants/app.constant';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { plainToInstance } from 'class-transformer';
-import { Model, ObjectId } from 'mongoose';
+import { Model, ObjectId, Schema } from 'mongoose';
 import { FirebaseService } from 'src/firebase/firebase/firebase.service';
 import { CreatePackageDto } from './dto/create-package.dto';
 import { PackageResponseDto } from './dto/package-res-dto';
-import { Package } from './entities/package.entity';
+import { Package } from './entities/package.schema';
 import { MediaType } from './types/package.types';
 
 @Injectable()
@@ -53,21 +53,15 @@ export class PackageService {
   // }
 
   // get paginated packages
-  // async getAllPackages(
-  //   reqDto: ListPackageReqDto,
-  // ): Promise<OffsetPaginatedDto<PackageResponseDto>> {
-  //   const query = this.packageRepository
-  //     .createQueryBuilder('user')
-  //     .orderBy('user.createdAt', 'DESC');
-  //   const [users, metaDto] = await paginate<PackageEntity>(query, reqDto, {
-  //     skipCount: false,
-  //     takeAll: false,
-  //   });
-  //   return new OffsetPaginatedDto(
-  //     plainToInstance(PackageResponseDto, users),
-  //     metaDto,
-  //   );
-  // }
+  async getAllPackages() {
+    const packages = await this.packageModel
+      .find({}, { inclusions: 0, exclusions: 0 })
+      .lean();
+    return packages.map((pkg) => ({
+      ...pkg,
+      _id: pkg._id.toString(),
+    }));
+  }
 
   // get package by id
   // async getPackageById(id: Uuid) {
@@ -109,5 +103,32 @@ export class PackageService {
     } catch (err) {
       throw new Error(err);
     }
+  }
+
+  async getPackagePrice(id: Schema.Types.ObjectId) {
+    const pkg = await this.packageModel.findOne(
+      { _id: id },
+      { price: 1, title: 1, imageUrls: 1 },
+    );
+
+    if (!pkg) return null;
+
+    return {
+      ...pkg.toObject(),
+      _id: pkg._id.toString(),
+    };
+  }
+  async getPackageInclusionAndExcluisons(id: Schema.Types.ObjectId) {
+    const pkg = await this.packageModel.findOne(
+      { _id: id },
+      { inclusions: 1, exclusions: 1 },
+    );
+
+    if (!pkg) return null;
+
+    return {
+      ...pkg.toObject(),
+      _id: pkg._id.toString(),
+    };
   }
 }

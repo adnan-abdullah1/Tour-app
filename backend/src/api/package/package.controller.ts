@@ -20,7 +20,10 @@ import { Response } from 'express';
 import { CreatePackageDto } from './dto/create-package.dto';
 import { ListPackageReqDto } from './dto/list-package.req.dto';
 import { PackageResponseDto } from './dto/package-res-dto';
+import { ScrapPackageDto } from './dto/scrape.dto';
 import { PackageService } from './package.service';
+import { ScraperService } from './scraper.service';
+import { ObjectId } from 'mongoose';
 
 const allowedMimeTypes = [
   'image/jpeg',
@@ -45,7 +48,10 @@ const maxSize = 5 * 1024 * 1024;
 @ApiTags('package')
 @Controller('package')
 export class PackageController {
-  constructor(private readonly packageService: PackageService) {}
+  constructor(
+    private readonly packageService: PackageService,
+    private scrapService: ScraperService,
+  ) { }
 
   @ApiPublic({
     type: CreatePackageDto,
@@ -82,6 +88,27 @@ export class PackageController {
   }
 
   @ApiPublic({
+    type: ScrapPackageDto,
+    summary: 'Scrap Package',
+  })
+  @Post('scrap')
+  async scrapPackage(
+    @Body() body: { url: string },
+  ): Promise<{ message: string }> {
+    try {
+      const { url } = body;
+      // const url = "https://www.kesari.in/tourIti/Group-Tours/Himachal/HE/ALL-OF-HIMACHAL";
+
+      await this.scrapService.scrapeAndSavePackage(url);
+      return { message: 'success' };
+
+    } catch (err) {
+      console.error(err);
+      throw new BadRequestException(err.message);
+    }
+  }
+
+  @ApiPublic({
     summary: 'Soft Delete package',
   })
   @ApiParam({
@@ -99,8 +126,8 @@ export class PackageController {
     summary: 'Get all packages with pagination',
   })
   @Get('')
-  async getAllPackages(@Query() reqDto: ListPackageReqDto) {
-    // return await this.packageService.getAllPackages(reqDto);
+  async getAllPackages() {
+    return await this.packageService.getAllPackages();
   }
 
   @ApiPublic({
@@ -115,5 +142,33 @@ export class PackageController {
   @Get(':id')
   async getPackageById(@Param('id', ParseUUIDPipe) id: Uuid) {
     // return await this.packageService.getPackageById(id);
+  }
+
+  @ApiPublic({
+    summary: 'Get package by id',
+  })
+  @ApiParam({
+    name: 'id',
+    description: 'Get package by id',
+    type: String,
+    example: '123e4567-e89b-12d3-a456-426614174000',
+  })
+  @Get('price-details/:id')
+  async getPackagePrice(@Param('id') id: ObjectId) {
+    return await this.packageService.getPackagePrice(id);
+  }
+
+  @ApiPublic({
+    summary: 'Get package by id',
+  })
+  @ApiParam({
+    name: 'id',
+    description: 'Get package by id',
+    type: String,
+    example: '123e4567-e89b-12d3-a456-426614174000',
+  })
+  @Get('inclusion-exclusion/:id')
+  async getPackageInclusionExclusion(@Param('id') id: ObjectId) {
+    return await this.packageService.getPackageInclusionAndExcluisons(id);
   }
 }
