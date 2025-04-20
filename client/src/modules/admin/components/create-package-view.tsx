@@ -373,7 +373,7 @@ export default function ScrapPackageView() {
           />
 
           <div className="pt-4 flex justify-end">
-            <Button type="submit" className="w-[200px]" disabled={isSubmitting}>
+            <Button type="submit" className="w-[200px]" variant={'tour_button_primary'} disabled={isSubmitting}>
               {isSubmitting ? "Scraping..." : "Scrape Package"}
             </Button>
           </div>

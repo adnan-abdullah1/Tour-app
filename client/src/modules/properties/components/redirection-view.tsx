@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 export default function ClientRedirectButton({ redirectionUrl }: { redirectionUrl?: string }) {
   const handleClick = () => {
     if (redirectionUrl) {
-      window.location.href = redirectionUrl;
+      window.open(redirectionUrl, "_blank");
     }
   };
 
