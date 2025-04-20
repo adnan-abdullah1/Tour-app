@@ -38,7 +38,7 @@ export default function HomeView() {
         <p className="text-sm md:text-base mb-6">Discover amazing places at exclusive deals</p>
 
         {/* Tabs */}
-        <Tabs defaultValue="hotel" className="mb-6">
+        {/* <Tabs defaultValue="hotel" className="mb-6">
           <TabsList className="bg-transparent flex-wrap justify-center gap-2">
             {["Packages", "Car", "Cruise", "Flights"].map((tab) => (
               <TabsTrigger
@@ -50,7 +50,7 @@ export default function HomeView() {
               </TabsTrigger>
             ))}
           </TabsList>
-        </Tabs>
+        </Tabs> */}
 
         {/* Search Form */}
         <div className="w-full max-w-5xl bg-white/10 backdrop-blur-xl rounded-2xl p-4 md:p-6 grid gap-4 md:grid-cols-4 md:items-center shadow-lg border border-white/20 text-white">

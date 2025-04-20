@@ -17,14 +17,14 @@ interface Package {
   }
 
 export default function RecommendedDestinations() {
-    const [packages, setPackages] = useState<Package[]>([]);
+    const [packages, setPackages] = useState<any[]>([]);
 
     useEffect(() => {
         async function fetchPackages() {
             try {
                 const res = await fetch("http://localhost:5000/api/package");
-                const json = await res.json();
-                setPackages(json.data || []);
+                const data = await res.json();
+                setPackages(data || []);
             } catch (error) {
                 console.error("Error fetching packages:", error);
             }
@@ -47,19 +47,19 @@ export default function RecommendedDestinations() {
                     <CarouselContent className="-ml-4">
                         {packages.map((pkg, index) => (
                             <CarouselItem
-                                key={pkg.id || index}
+                                key={pkg._id || index}
                                 className="pl-4 
                                            basis-full 
                                            sm:basis-1/2 
                                            md:basis-1/3 
                                            lg:basis-1/5"
                             >
-                                <Link href={`/packages/${pkg.id}`} className="block">
+                                <Link href={`/packages/${pkg._id}`} className="block">
                                 <Card className="overflow-hidden rounded-xl shadow-md group border-none !bg-transparent !shadow-none">
                                     <div className="relative w-full h-[200px] overflow-hidden rounded-sm">
-                                        {pkg.media?.[0]?.url ? (
+                                        {pkg.imageUrls?.[0] ? (
                                             <Image
-                                                src={pkg.media[0].url}
+                                                src={pkg.imageUrls?.[0]}
                                                 alt={`Destination ${index + 1}`}
                                                 fill
                                                 className="object-cover transition-transform duration-300 ease-in-out group-hover:scale-110"
@@ -71,8 +71,8 @@ export default function RecommendedDestinations() {
                                         )}
                                     </div>
                                     <div className="p-2 space-y-1">
-                                        <h3 className="text-lg font-semibold">{pkg.name}</h3>
-                                        <p className="text-sm text-gray-500">{pkg.location}</p>
+                                        <h3 className="text-lg font-semibold">{pkg.title}</h3>
+                                        <p className="text-sm text-gray-500">{pkg.location || 'Kashmir'}</p>
                                         <div className="flex items-center justify-between mt-2">
                                             <span className="text-white text-xs px-2 py-1 rounded" style={{ backgroundColor: '#3554d1' }}>
                                                 ⭐ {pkg.rating || 0}

@@ -18,7 +18,7 @@ export default async function PackageView({
       <PackageDetails   packageId={packageId} />
       <PackageHighlight />
       <PackagePlaceToSee />
-      <InclusionExclusionTab />
+      <InclusionExclusionTab  packageId={packageId}/>
       <PackageDayPlan />
       <PackageProperties />
       <PackagePolicies />

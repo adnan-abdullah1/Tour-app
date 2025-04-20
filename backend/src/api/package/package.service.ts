@@ -15,7 +15,7 @@ export class PackageService {
     @InjectModel('Package')
     private readonly packageModel: Model<Package>,
     private readonly firebaseService: FirebaseService,
-  ) {}
+  ) { }
 
   async createPackage(dto: CreatePackageDto) {
     const Package = new this.packageModel({
@@ -108,7 +108,7 @@ export class PackageService {
   async getPackagePrice(id: Schema.Types.ObjectId) {
     const pkg = await this.packageModel.findOne(
       { _id: id },
-      { price: 1, title: 1, imageUrls: 1 },
+      { price: 1, title: 1, imageUrls: 1, redirectionUrl: 1 },
     );
 
     if (!pkg) return null;
