@@ -31,9 +31,9 @@ export default async function PackageDetails({ packageId }: PackageDetailsProps)
       <div className="grid sm:grid-cols-12 p-4 mt-4">
         <div className="col-span-12 sm:col-span-6 flex flex-col">
           <span>{data?.title || 'The Montcalm At Brewery London City'}</span>
-          <TypographyExtraSmallMuted>
+          {/* <TypographyExtraSmallMuted>
             {data?.location || 'Westminster Borough, London'}
-          </TypographyExtraSmallMuted>
+          </TypographyExtraSmallMuted> */}
         </div>
         <div className="col-span-12 sm:col-span-6 flex flex-col md:flex-row justify-center md:justify-end items-center gap-y-4 md:gap-y-0 gap-x-0 md:gap-x-2">
           <span>from ${data?.price || '72'}</span>

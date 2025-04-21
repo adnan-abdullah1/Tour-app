@@ -160,7 +160,7 @@ export class PackageController {
 
   @ApiPublic({
     summary: 'Get package by id',
-  })
+  }) 
   @ApiParam({
     name: 'id',
     description: 'Get package by id',
