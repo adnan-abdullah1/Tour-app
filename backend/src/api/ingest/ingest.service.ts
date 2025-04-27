@@ -37,11 +37,11 @@ export class IngestService {
         return;
       }
 
-      for (const affiliate of affiliates) {
-        this.logger.log(`Syncing data for affiliate: ${affiliate.name}`);
-        // Call the sync method for each affiliate
-        await this.syncAffiliateData(affiliate);
-      }
+      // for (const affiliate of affiliates) {
+      //   this.logger.log(`Syncing data for affiliate: ${affiliate.name}`);
+      //   // Call the sync method for each affiliate
+      //   await this.syncAffiliateData(affiliate);
+      // }
       this.logger.log('Sync operation completed successfully');
     } catch (err) {
       this.logger.error('Error in sync method', err);

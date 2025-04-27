@@ -49,7 +49,7 @@ export default function HeaderView() {
       <div className="flex justify-between items-center max-w-[1400px] mx-auto relative">
 
         {/* Logo */}
-        <div className="text-xl font-bold">YourLogo</div>
+        <div className="text-xl font-bold">Logo</div>
 
         {/* Desktop Navigation */}
         <ul className="hidden md:flex gap-8 items-center">

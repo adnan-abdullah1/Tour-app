@@ -1,18 +1,20 @@
-// app/packages/page.tsx
+'use client';
 
-import PackagesView from "@/modules/home/components/packages-view";
-
-// interface SearchParams {
-//   location?: string;
-// }
-
-// interface Props {
-//   searchParams: SearchParams;
-// }
+import { useSearchParams } from 'next/navigation';
+import PackagesView from '@/modules/home/components/packages-view';
 
 export default function Packages() {
-  // { searchParams }: Props
-  // const location = searchParams.location ?? '';
+  const searchParams = useSearchParams();
 
-  return <PackagesView  />;
+  const location = searchParams.get('location') || '';
+  const date = searchParams.get('date') || '';
+  const duration = searchParams.get('duration') || '';
+
+  return (
+    <PackagesView 
+      location={location} 
+      date={date} 
+      duration={duration} 
+    />
+  );
 }
