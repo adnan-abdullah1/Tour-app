@@ -13,7 +13,6 @@ import {
   UploadedFiles,
   UseInterceptors,
 } from '@nestjs/common';
-import { ParseObjectIdPipe } from '@nestjs/mongoose';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { ApiParam, ApiTags } from '@nestjs/swagger';
 import { ObjectId } from 'mongoose';
@@ -115,7 +114,35 @@ export class PackageController {
     example: '507f1f77bcf86cd799439011',
   })
   @Get(':id')
-  async getPackageById(@Param('id', ParseObjectIdPipe) id: ObjectId) {
-    return await this.packageService.getPackageById(id);
+  async getPackageById(@Param('id', ParseUUIDPipe) id: Uuid) {
+    // return await this.packageService.getPackageById(id);
+  }
+
+  @ApiPublic({
+    summary: 'Get package by id',
+  })
+  @ApiParam({
+    name: 'id',
+    description: 'Get package by id',
+    type: String,
+    example: '123e4567-e89b-12d3-a456-426614174000',
+  })
+  @Get('price-details/:id')
+  async getPackagePrice(@Param('id') id: ObjectId) {
+    return await this.packageService.getPackagePrice(id);
+  }
+
+  @ApiPublic({
+    summary: 'Get package by id',
+  })
+  @ApiParam({
+    name: 'id',
+    description: 'Get package by id',
+    type: String,
+    example: '123e4567-e89b-12d3-a456-426614174000',
+  })
+  @Get('inclusion-exclusion/:id')
+  async getPackageInclusionExclusion(@Param('id') id: ObjectId) {
+    return await this.packageService.getPackageInclusionAndExcluisons(id);
   }
 }

@@ -80,16 +80,11 @@ export default function RecommendedDestinations() {
                     </div>
                     <div className="p-2 space-y-1">
                       <h3 className="text-lg font-semibold">{pkg.title}</h3>
-                      <p className="text-sm text-gray-500">
-                        {pkg.location || "Kashmir"}
-                      </p>
+                      {/* <p className="text-sm text-gray-500">{pkg.location || 'Kashmir'}</p> */}
                       <div className="flex items-center justify-between mt-2">
-                        <span
-                          className="text-white text-xs px-2 py-1 rounded"
-                          style={{ backgroundColor: "#3554d1" }}
-                        >
-                          ⭐ {pkg.rating || 0}
-                        </span>
+                        {/* <span className="text-white text-xs px-2 py-1 rounded" style={{ backgroundColor: '#3554d1' }}>
+                                                ⭐ {pkg.rating || 0}
+                                            </span> */}
                         <span className="text-xs text-gray-500">
                           {"0 reviews"}
                         </span>

@@ -24,7 +24,10 @@ async function bootstrap() {
     const app = await NestFactory.create(AppModule, {
       bufferLogs: true,
     });
+<<<<<<< HEAD
     console.log(app);
+=======
+>>>>>>> b91e200b5d835912378189aea8f970505535f33b
     app.useLogger(app.get(Logger));
 
     // Setup security headers
