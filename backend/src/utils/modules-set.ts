@@ -15,6 +15,7 @@ import { ModuleMetadata } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 // import { TypeOrmModule } from '@nestjs/typeorm';
+import { ScheduleModule } from '@nestjs/schedule';
 import { redisStore } from 'cache-manager-ioredis-yet';
 import {
   AcceptLanguageResolver,
@@ -128,13 +129,15 @@ function generateModulesSet() {
       const mongoUri = configService.getOrThrow('database.mongoUri', {
         infer: true,
       });
-      console.log('MongoDB URI:', mongoUri);
       return {
         uri: mongoUri,
       };
     },
     inject: [ConfigService],
   });
+
+  const scheduler = ScheduleModule.forRoot();
+
   const modulesSet = process.env.MODULES_SET || 'monolith';
 
   switch (modulesSet) {
@@ -149,6 +152,7 @@ function generateModulesSet() {
         MailModule,
         FirebaseModule,
         mongooseModule,
+        scheduler,
       ];
       break;
     case 'api':
@@ -164,12 +168,14 @@ function generateModulesSet() {
       break;
     case 'background':
       customModules = [
+        ApiModule,
         bullModule,
         BackgroundModule,
         cacheModule,
         i18nModule,
         loggerModule,
         mongooseModule,
+        MailModule,
       ];
       break;
     default:

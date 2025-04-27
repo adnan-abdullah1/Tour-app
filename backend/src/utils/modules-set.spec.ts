@@ -28,9 +28,10 @@ describe('generateModulesSet', () => {
         ApiModule,
         expect.any(Object), // BullModule
         expect.any(Object), // BackgroundModule
-        expect.any(Object), // TypeOrmModule
         expect.any(Object), // I18nModule
         expect.any(Object), // LoggerModule
+        expect.any(Object), // Mongoose
+
         MailModule,
       ]),
     );
@@ -63,9 +64,10 @@ describe('generateModulesSet', () => {
         ApiModule,
         expect.any(Object), // BullModule
         expect.any(Object), // BackgroundModule
-        expect.any(Object), // TypeOrmModule
         expect.any(Object), // I18nModule
         expect.any(Object), // LoggerModule
+        expect.any(Object), // mongodb
+
         MailModule,
       ]),
     );
@@ -78,9 +80,10 @@ describe('generateModulesSet', () => {
       expect.arrayContaining([
         expect.any(Object), // BullModule
         expect.any(Object), // BackgroundModule
-        expect.any(Object), // TypeOrmModule
         expect.any(Object), // I18nModule
         expect.any(Object), // LoggerModule
+        expect.any(Object), // mongodb
+
       ]),
     );
   });

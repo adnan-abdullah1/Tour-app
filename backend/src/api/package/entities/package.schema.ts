@@ -1,13 +1,17 @@
 import { Document, Schema } from 'mongoose';
 
 export interface Package extends Document {
+  name: string;
   title: string;
+  location: string;
+  description: string;
+  rating: number;
   duration: string;
-  startDate: string;
-  endDate: string;
+  startDate: Date;
+  endDate: Date;
   startDay: string;
   endDay: string;
-  price: string;
+  price: number;
   callNumber: string;
   email: string;
   redirectionUrl: string;
@@ -26,32 +30,51 @@ export interface Package extends Document {
     content: string[];
   };
   imageUrls: string[];
+  daysPlan: Array<{
+    day: number;
+    plan: string;
+    description: string;
+  }>;
+  status: 'active' | 'inactive' | 'archived';
 }
 
 export const PackageSchema = new Schema<Package>({
-  title: { type: String, required: true },
-  duration: { type: String, required: true },
-  startDate: { type: String, required: true },
-  endDate: { type: String, required: true },
-  redirectionUrl: { type: String, required: true },
-  startDay: { type: String, required: true },
-  endDay: { type: String, required: true },
-  price: { type: String, required: true },
-  callNumber: { type: String, required: true },
-  email: { type: String, required: true },
-  inclusions: { type: [String], required: true },
-  exclusions: { type: [String], required: true },
+  title: { type: String, required: false },
+  location: { type: String, required: false },
+  description: { type: String, require: false },
+  rating: { type: Number, require: false },
+  duration: { type: String, required: false },
+  startDate: { type: Date, required: false },
+  endDate: { type: Date, required: false },
+  redirectionUrl: { type: String, required: false, unique: true },
+  startDay: { type: String, required: false },
+  endDay: { type: String, required: false },
+  price: { type: Number, required: true },
+  callNumber: { type: String, required: false },
+  email: { type: String, required: false },
+  inclusions: { type: [String], required: false },
+  exclusions: { type: [String], required: false },
   highlights: {
-    title: { type: String, required: true },
-    content: { type: [String], required: true },
+    title: { type: String, required: false },
+    content: { type: [String], required: false },
   },
   tourItinerary: {
-    title: { type: String, required: true },
-    content: { type: [String], required: true },
+    title: { type: String, required: false },
+    content: { type: [String], required: false },
   },
   policy: {
-    title: { type: String, required: true },
-    content: { type: [String], required: true },
+    title: { type: String, required: false },
+    content: { type: [String], required: false },
   },
-  imageUrls: { type: [String], required: true },
+  imageUrls: { type: [String], required: false },
+  daysPlan: {
+    day: { type: Number, required: false },
+    plan: { type: String, required: false },
+    description: { type: String, required: false },
+  },
+  status: {
+    type: String,
+    enum: ['active', 'inactive', 'archived'],
+    default: 'inactive',
+  },
 });

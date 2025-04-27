@@ -3,11 +3,11 @@ import { Document, Schema } from 'mongoose';
 export const PackageSchema = new Schema(
   {
     name: { type: String, required: true },
-    location: { type: String, default: '', maxlength: 255, nullable: true },
+    location: { type: String, default: '', nullable: true },
     description: { type: String, nullable: true },
-    redirectUrl: { type: String, default: '', nullable: true },
+    redirectUrl: { type: String, default: '', nullable: true, unique: true },
     rating: { type: Number, default: 0, nullable: true },
-    price: { type: Schema.Types.Decimal128, default: 0 },
+    price: { type: Number, default: 0 },
     inclusions: { type: String, nullable: true },
     exclusions: { type: String, nullable: true },
     createdAt: { type: Date, default: Date.now },
@@ -34,8 +34,8 @@ export const PackageSchema = new Schema(
     endDate: { type: Date, nullable: true },
     highlights: [
       {
-        icon: { type: String, required: true },
-        description: { type: String, required: true },
+        icon: { type: String, required: false },
+        description: { type: String, required: false },
       },
     ],
   },
@@ -55,7 +55,7 @@ export interface Package extends Document {
   createdAt: Date;
   deletedAt: Date;
   daysPlan: Array<{ day: number; plan: string; description: string }>;
-  media: Array<{ url: string; path: string }>;
+  media: Array<{ url: string; path: string; isThirdPartyImage: false }>;
   status: 'active' | 'inactive' | 'archived';
   startDate: Date;
   endDate: Date;

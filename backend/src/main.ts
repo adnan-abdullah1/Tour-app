@@ -21,17 +21,14 @@ import setupSwagger from './utils/setup-swagger';
 
 async function bootstrap() {
   try {
-
-
     const app = await NestFactory.create(AppModule, {
       bufferLogs: true,
     });
-    console.log(app)
+    console.log(app);
     app.useLogger(app.get(Logger));
 
     // Setup security headers
     app.use(helmet());
-
 
     // For high-traffic websites in production, it is strongly recommended to offload compression from the application server - typically in a reverse proxy (e.g., Nginx). In that case, you should not use compression middleware.
     app.use(compression());
@@ -39,7 +36,8 @@ async function bootstrap() {
     const configService = app.get(ConfigService<AllConfigType>);
     const reflector = app.get(Reflector);
     const isDevelopment =
-      configService.getOrThrow('app.nodeEnv', { infer: true }) === 'development';
+      configService.getOrThrow('app.nodeEnv', { infer: true }) ===
+      'development';
     const corsOrigin = configService.getOrThrow('app.corsOrigin', {
       infer: true,
     });
@@ -91,7 +89,7 @@ async function bootstrap() {
 
     return app;
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
 }
 

@@ -1,43 +1,45 @@
 import { SYSTEM_USER_ID } from '@/constants/app.constant';
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { plainToInstance } from 'class-transformer';
 import { Model, ObjectId, Schema } from 'mongoose';
 import { FirebaseService } from 'src/firebase/firebase/firebase.service';
 import { CreatePackageDto } from './dto/create-package.dto';
-import { PackageResponseDto } from './dto/package-res-dto';
 import { Package } from './entities/package.schema';
 import { MediaType } from './types/package.types';
 
 @Injectable()
 export class PackageService {
+  private readonly logger = new Logger(PackageService.name);
+
   constructor(
     @InjectModel('Package')
     private readonly packageModel: Model<Package>,
     private readonly firebaseService: FirebaseService,
-  ) { }
+  ) {}
 
   async createPackage(dto: CreatePackageDto) {
-    const Package = new this.packageModel({
-      name: dto.name,
-      location: dto.location,
-      description: dto.description,
-      price: dto.price,
-      redirectUrl: dto.redirectUrl,
-      inclusions: dto.inclusions,
-      exclusions: dto.exclusions,
-      highlights: dto.highlights,
-      startDate: dto.startDate,
-      endDate: dto.endDate,
-      daysPlan: dto.daysPlan,
-      createdBy: SYSTEM_USER_ID,
-      updatedBy: SYSTEM_USER_ID,
-    });
+    try {
+      const Package = new this.packageModel({
+        name: dto.name,
+        location: dto.location,
+        description: dto.description,
+        price: dto.price,
+        redirectUrl: dto.redirectUrl,
+        inclusions: dto.inclusions,
+        exclusions: dto.exclusions,
+        highlights: dto.highlights,
+        startDate: dto.startDate,
+        endDate: dto.endDate,
+        daysPlan: dto.daysPlan,
+        createdBy: SYSTEM_USER_ID,
+        updatedBy: SYSTEM_USER_ID,
+      });
 
-    await Package.save();
-    return plainToInstance(PackageResponseDto, {
-      id: Package._id,
-    });
+      const res = await Package.save();
+      return res;
+    } catch (err) {
+      throw new Error(err);
+    }
   }
 
   // soft delete package
@@ -53,10 +55,30 @@ export class PackageService {
   // }
 
   // get paginated packages
-  async getAllPackages() {
+  async getAllPackages({
+    location,
+    limit = 10,
+    page = 1,
+  }: {
+    location?: string;
+    limit?: number;
+    page?: number;
+  }) {
+    const filter: any = {};
+
+    if (location) {
+      filter.location = { $regex: location, $options: 'i' };
+    }
+
+    const skip = (page - 1) * limit;
+
     const packages = await this.packageModel
-      .find({}, { inclusions: 0, exclusions: 0 })
+      .find(filter, { inclusions: 0, exclusions: 0 })
+      .skip(skip)
+      .limit(limit)
       .lean();
+
+    // Map _id to string and return the result
     return packages.map((pkg) => ({
       ...pkg,
       _id: pkg._id.toString(),
@@ -64,16 +86,14 @@ export class PackageService {
   }
 
   // get package by id
-  // async getPackageById(id: Uuid) {
-  //   const Package = await this.packageRepository.findOne({
-  //     where: { id },
-  //   });
-  //   if (!Package) {
-  //     throw new NotFoundException(`Package not found with id ${id}`);
-  //   }
+  async getPackageById(id: ObjectId) {
+    const Package = await this.packageModel.findById(id).lean();
+    if (!Package) {
+      throw new NotFoundException(`Package not found with id ${id}`);
+    }
 
-  //   return Package;
-  // }
+    return Package;
+  }
 
   async uploadPackageMedia(files: Express.Multer.File[], packageId: ObjectId) {
     try {
@@ -99,7 +119,7 @@ export class PackageService {
       }
 
       Package.media = [...(Package.media || []), ...packageMedia];
-      await Package.save();
+      return await Package.save();
     } catch (err) {
       throw new Error(err);
     }
@@ -130,5 +150,15 @@ export class PackageService {
       ...pkg.toObject(),
       _id: pkg._id.toString(),
     };
+  }
+
+  async saveSyncData(data) {
+    try {
+      const packages = await this.packageModel.insertMany(data);
+      return packages;
+    } catch (err) {
+      this.logger.error('Error saving data to database', err);
+      throw new Error('Error saving data to database');
+    }
   }
 }
