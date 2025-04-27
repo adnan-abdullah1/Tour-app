@@ -13,7 +13,6 @@ import { mockPackages } from './mock.data';
 export class IngestService {
   private readonly axiosInstance: AxiosInstance;
   private readonly logger = new Logger(IngestService.name);
-  private mutex = false;
 
   constructor(
     @InjectModel('Affiliate')
@@ -31,14 +30,6 @@ export class IngestService {
   @Cron('30 * * * * *')
   async sync() {
     try {
-      // Check if the mutex is already locked
-      if (this.mutex) {
-        this.logger.warn('Sync operation is already in progress');
-        return;
-      }
-      // Lock the mutex to prevent concurrent execution
-      this.mutex = true;
-
       // Perform the sync operation
       const affiliates = await this.getAffiliates();
       if (affiliates.length === 0) {
@@ -52,12 +43,7 @@ export class IngestService {
         await this.syncAffiliateData(affiliate);
       }
       this.logger.log('Sync operation completed successfully');
-
-      // Release the mutex after the operation is complete
-      this.mutex = false;
     } catch (err) {
-      this.mutex = false; // Release the mutex in case of error
-
       this.logger.error('Error in sync method', err);
     }
   }
