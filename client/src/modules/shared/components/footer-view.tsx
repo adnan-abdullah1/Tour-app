@@ -1,101 +1,65 @@
-import { TypographyExtraSmallMuted } from "@/components/ui/typography";
-import { Facebook, Instagram, Twitter } from "lucide-react";
+// import { TypographyExtraSmallMuted } from "@/components/ui/typography";
+import { Facebook, Instagram } from "lucide-react";
+import { X, Music } from "lucide-react"; // Using 'X' as Twitter (new) and 'Music' as TikTok placeholder.
 
 export default function FooterView() {
     return (
-        <div className="h-[350px] flex mb-3 flex-col items-center justify-between pt-[60px] w-4/5 ml-[130px] space-y-4">
-            <div className="grid gap-8 w-full  
+        <div className="flex flex-col items-center w-full bg-[#f9f7f6] pt-12 pb-8 space-y-8">
+            {/* Top Grid Links */}
+            <div className="grid w-4/5 gap-8 
                 grid-cols-1 
                 sm:grid-cols-2 
                 md:grid-cols-3 
-                lg:grid-cols-5">
-                {/* Contact Us */}
-                <div >
-                    <h3 className="font-semibold text-lg">Contact Us</h3>
-                    <div className="flex flex-col mt-4 text-sm text-gray-600 space-y-3">
-                        <TypographyExtraSmallMuted>Toll free customer care</TypographyExtraSmallMuted>
-                        <TypographyExtraSmallMuted>Need Live support</TypographyExtraSmallMuted>
-                    </div>
+                lg:grid-cols-3
+                text-[#b0004b]">
+                {/* First Column */}
+                <div className="flex flex-col space-y-3 text-sm font-medium">
+                    <span>About Us</span>
+                    <span>Work with us</span>
+                    <span>Blog</span>
                 </div>
 
-                {/* Company */}
-                <div>
-                    <h3 className="font-semibold text-lg">Company</h3>
-                    <div className="flex flex-col mt-4 text-sm text-gray-600 space-y-3">
-                        <TypographyExtraSmallMuted>About Us</TypographyExtraSmallMuted>
-                        <TypographyExtraSmallMuted>Careers</TypographyExtraSmallMuted>
-                        <TypographyExtraSmallMuted>Gift Cards</TypographyExtraSmallMuted>
-                    </div>
+                {/* Second Column */}
+                <div className="flex flex-col space-y-3 text-sm font-medium">
+                    <span>FAQs</span>
+                    <span>Contact us</span>
+                    <span>Become an Affiliate</span>
                 </div>
 
-                {/* Support */}
-                <div>
-                    <h3 className="font-semibold text-lg">Support</h3>
-                    <div className="flex flex-col mt-4 text-sm text-gray-600 space-y-3">
-                        <TypographyExtraSmallMuted>Contact</TypographyExtraSmallMuted>
-                        <TypographyExtraSmallMuted>Legal Notice</TypographyExtraSmallMuted>
-                        <TypographyExtraSmallMuted>Privacy Policy</TypographyExtraSmallMuted>
-                        <TypographyExtraSmallMuted>Terms and Conditions</TypographyExtraSmallMuted>
-                    </div>
-                </div>
-
-                {/* Other Services */}
-                <div>
-                    <h3 className="font-semibold text-lg">Other Services</h3>
-                    <div className="flex flex-col mt-4 text-sm text-gray-600 space-y-3">
-                        <TypographyExtraSmallMuted>Car Hire</TypographyExtraSmallMuted>
-                        <TypographyExtraSmallMuted>Activity Finder</TypographyExtraSmallMuted>
-                        <TypographyExtraSmallMuted>Tour List</TypographyExtraSmallMuted>
-                        <TypographyExtraSmallMuted>Flight finder</TypographyExtraSmallMuted>
-                        <TypographyExtraSmallMuted>Cruise Ticket</TypographyExtraSmallMuted>
-                        <TypographyExtraSmallMuted>Holiday Rental</TypographyExtraSmallMuted>
-                        <TypographyExtraSmallMuted>Travel Agents</TypographyExtraSmallMuted>
-                    </div>
-                </div>
-
-                {/* Mobile */}
-                <div>
-                    <h3 className="font-semibold text-lg">Mobile</h3>
-                    <div className="flex flex-col mt-4 text-sm text-gray-600 space-y-3">
-                        <TypographyExtraSmallMuted>Apple</TypographyExtraSmallMuted>
-                        <TypographyExtraSmallMuted>Google play</TypographyExtraSmallMuted>
-                    </div>
+                {/* Third Column */}
+                <div className="flex flex-col space-y-3 text-sm font-medium">
+                    <span>Destination Guides</span>
+                    <span>Featured Destinations</span>
+                    <span>Holiday Types</span>
                 </div>
             </div>
 
-            {/* Horizontal line */}
-            <hr className="w-full border-t border-gray-300 my-4" />
+            {/* Social Media Icons */}
+            <div className="flex gap-6 text-[#b0004b]">
+                <Instagram size={24} />
+                <X size={24} />
+                <Music size={24} /> {/* TikTok placeholder */}
+                <Facebook size={24} />
+            </div>
 
-            {/* Copyright Section */}
-            <div className="w-full flex flex-col items-center justify-between gap-6 md:flex-row xs:items-start text-sm text-gray-600">
-                {/* Left side */}
-                <div className="flex flex-wrap flex-row gap-4 text-center md:text-left">
-                    <div className="flex gap-2 items-start">
-                        <TypographyExtraSmallMuted>@ 2023 ib-themes</TypographyExtraSmallMuted>
-                        <TypographyExtraSmallMuted>All Rights Reserved</TypographyExtraSmallMuted>
-                    </div>
+            {/* Divider */}
+            <hr className="w-4/5 border-t border-gray-300" />
 
-                    <div className="flex gap-4">
-                        <TypographyExtraSmallMuted>Privacy</TypographyExtraSmallMuted>
-                        <TypographyExtraSmallMuted>Terms</TypographyExtraSmallMuted>
-                        <TypographyExtraSmallMuted>Site Map</TypographyExtraSmallMuted>
-                    </div>
-                </div>
+            {/* Bottom Links */}
+            <div className="flex flex-wrap justify-center gap-6 text-sm text-[#b0004b] font-medium">
+               
+                <span>Cookies</span>
+                <span>Manage Preferences</span>
+                <span>Privacy</span>
+                <span>Terms and conditions</span>
+            </div>
 
-                {/* Right side */}
-                <div className="flex items-start w-full md:w-auto text-left gap-4 md:items-end md:text-right">
-                    <div className="flex gap-2">
-                        <TypographyExtraSmallMuted>English</TypographyExtraSmallMuted>
-                        <TypographyExtraSmallMuted>$USD</TypographyExtraSmallMuted>
-                    </div>
-                    <div className="flex justify-start gap-4 md:justify-end">
-                        <TypographyExtraSmallMuted><Facebook /></TypographyExtraSmallMuted>
-                        <TypographyExtraSmallMuted><Twitter /></TypographyExtraSmallMuted>
-                        <TypographyExtraSmallMuted><Instagram /></TypographyExtraSmallMuted>
-                        {/* <span>In</span> */}
-                    </div>
-                </div>
+            {/* Company Info */}
+            <div className="text-center text-xs text-gray-500">
+                Copyright © 2025 Icelolly Marketing Ltd |
+                Registered in England Company No. 05655962 |
+                VAT No. GB175996442
             </div>
         </div>
-    )
+    );
 }
