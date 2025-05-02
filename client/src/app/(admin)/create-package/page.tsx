@@ -1,4 +1,4 @@
-import CreatePackageView from "@/modules/admin/components/create-package-view";
+import CreatePackageView from "@/app/(admin)/_components/create-package-view";
 
 export default function CreatePackage(){
     return (

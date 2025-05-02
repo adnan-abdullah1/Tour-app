@@ -1,7 +1,7 @@
 'use client';
 
 import { useSearchParams } from 'next/navigation';
-import PackagesView from '@/modules/home/components/packages-view';
+import PackagesView from '@/app/(package)/packages/_components/packages-view';
 
 export default function Packages() {
   const searchParams = useSearchParams();

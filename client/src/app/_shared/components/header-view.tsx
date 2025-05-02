@@ -5,6 +5,7 @@ import { Menu, ChevronDown, ChevronUp, ChevronRight, ArrowLeft } from 'lucide-re
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { DialogTitle } from '@radix-ui/react-dialog';
+import Link from 'next/link';
 
 const navItems = [
   {
@@ -49,7 +50,10 @@ export default function HeaderView() {
       <div className="flex justify-between items-center max-w-[1400px] mx-auto relative">
 
         {/* Logo */}
+        <Link href={'/'}>
         <div className="text-xl font-bold">Logo</div>
+        </Link>
+        
 
         {/* Desktop Navigation */}
         <ul className="hidden md:flex gap-8 items-center">

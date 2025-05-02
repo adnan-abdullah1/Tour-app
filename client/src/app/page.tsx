@@ -1,7 +1,7 @@
-import HomeView from "@/modules/home/components/home-view";
-import HolidaysInspiration from "./(root)/home/components/holiday-inspirations";
-import FeaturesSlider from "./(root)/home/components/slider";
-import PopularDestinations from "@/modules/home/components/popular-destinations-view";
+import HomeView from "@/app/(root)/home/_components/home-view";
+import HolidaysInspiration from "./(root)/home/_components/holiday-inspirations";
+import FeaturesSlider from "./(root)/home/_components/slider";
+import PopularDestinations from "@/app/(root)/home/_components/popular-destinations-view";
 
 
 

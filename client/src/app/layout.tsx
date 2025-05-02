@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import {  Inter } from "next/font/google";
 import "./globals.css";
-import HeaderView from "@/modules/shared/components/header/header-view";
-import FooterView from "@/modules/shared/components/footer-view";
-import Subscribe from "@/modules/home/components/subscribe-view";
+import HeaderView from "@/app/_shared/components/header-view";
+import FooterView from "@/app/_shared/components/footer-view";
+import Subscribe from "@/app/_shared/components/subscribe-view";
 
 const inter = Inter({ subsets: ['latin'] , weight: ['400', '500', '600', '700']})
 
